@@ -32,7 +32,11 @@ export const createSwapRequest = async (req: AuthRequest, res: Response) => {
       message
     };
 
-    const result = await swapRequestService.createSwapRequest(userId, createSwapData);
+    // Extract the user token from Authorization header
+    const authHeader = req.headers['authorization'];
+    const userToken = authHeader ? authHeader.split(' ')[1] : undefined;
+
+    const result = await swapRequestService.createSwapRequest(userId, createSwapData, userToken);
 
     if (!result.success) {
       return res.status(400).json({ 
@@ -188,7 +192,11 @@ export const updateSwapRequest = async (req: AuthRequest, res: Response) => {
       message
     };
 
-    const result = await swapRequestService.updateSwapRequest(id, userId, updateData);
+    // Extract the user token from Authorization header
+    const authHeader = req.headers['authorization'];
+    const userToken = authHeader ? authHeader.split(' ')[1] : undefined;
+
+    const result = await swapRequestService.updateSwapRequest(id, userId, updateData, userToken);
 
     if (!result.success) {
       return res.status(400).json({ 
@@ -394,7 +402,11 @@ export const acceptSwapRequest = async (req: AuthRequest, res: Response) => {
       message
     };
 
-    const result = await swapRequestService.updateSwapRequest(id, userId, updateData);
+    // Extract the user token from Authorization header
+    const authHeader = req.headers['authorization'];
+    const userToken = authHeader ? authHeader.split(' ')[1] : undefined;
+
+    const result = await swapRequestService.updateSwapRequest(id, userId, updateData, userToken);
 
     if (!result.success) {
       return res.status(400).json({ 
@@ -444,7 +456,11 @@ export const rejectSwapRequest = async (req: AuthRequest, res: Response) => {
       message
     };
 
-    const result = await swapRequestService.updateSwapRequest(id, userId, updateData);
+    // Extract the user token from Authorization header
+    const authHeader = req.headers['authorization'];
+    const userToken = authHeader ? authHeader.split(' ')[1] : undefined;
+
+    const result = await swapRequestService.updateSwapRequest(id, userId, updateData, userToken);
 
     if (!result.success) {
       return res.status(400).json({ 

@@ -1,4 +1,4 @@
-import supabase from '../config/supabaseClient';
+import supabase, { createUserClient } from '../config/supabaseClient';
 import { 
   SwapRequest, 
   SwapRequestWithDetails, 
@@ -19,7 +19,8 @@ export class SwapRequestService {
    */
   async createSwapRequest(
     requesterId: string, 
-    swapData: CreateSwapRequestDto
+    swapData: CreateSwapRequestDto,
+    userToken?: string
   ): Promise<{ success: boolean; swap?: SwapRequestWithDetails; error?: string }> {
     try {
       // Validate the swap request
@@ -40,8 +41,9 @@ export class SwapRequestService {
         return { success: false, error: 'A similar swap request already exists' };
       }
 
-      // Create the swap request
-      const { data: swapRequest, error } = await supabase
+      // Create the swap request - use user client if token provided to respect RLS
+      const client = userToken ? createUserClient(userToken) : supabase;
+      const { data: swapRequest, error } = await client
         .from('swap_requests')
         .insert({
           requester_id: requesterId,
@@ -77,7 +79,8 @@ export class SwapRequestService {
   async updateSwapRequest(
     swapId: string, 
     userId: string, 
-    updateData: UpdateSwapRequestDto
+    updateData: UpdateSwapRequestDto,
+    userToken?: string
   ): Promise<{ success: boolean; swap?: SwapRequestWithDetails; error?: string }> {
     try {
       // Get the current swap request
@@ -97,8 +100,9 @@ export class SwapRequestService {
         return { success: false, error: isValidUpdate.errors.join(', ') };
       }
 
-      // Update the swap request
-      const { data: updatedSwap, error } = await supabase
+      // Update the swap request - use user client if token provided to respect RLS
+      const client = userToken ? createUserClient(userToken) : supabase;
+      const { data: updatedSwap, error } = await client
         .from('swap_requests')
         .update({
           status: updateData.status,

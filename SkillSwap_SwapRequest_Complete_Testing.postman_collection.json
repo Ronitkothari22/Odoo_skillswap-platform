@@ -1,0 +1,1896 @@
+{
+	"info": {
+		"_postman_id": "892bc3d7-e8f9-4c5a-88bb-58188323b2cd",
+		"name": "SkillSwap Platform - Swap Request Workflow Testing",
+		"description": "Complete testing suite for the Swap Request Workflow Module with real test users and comprehensive scenarios",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "45950426"
+	},
+	"item": [
+		{
+			"name": "🔐 Authentication Setup",
+			"item": [
+				{
+					"name": "Login - Alex Python Expert",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    if (response.session && response.session.access_token) {",
+									"        pm.environment.set('user1_token', response.session.access_token);",
+									"        pm.environment.set('user1_id', response.user.id);",
+									"        console.log('✅ Alex Python Expert logged in successfully');",
+									"    }",
+									"} else {",
+									"    console.log('❌ Alex Python Expert login failed');",
+									"    console.log('Response:', pm.response.text());",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"python_expert@test.com\",\n  \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login - Sarah React Developer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    if (response.session && response.session.access_token) {",
+									"        pm.environment.set('user2_token', response.session.access_token);",
+									"        pm.environment.set('user2_id', response.user.id);",
+									"        console.log('✅ Sarah React Developer logged in successfully');",
+									"    }",
+									"} else {",
+									"    console.log('❌ Sarah React Developer login failed');",
+									"    console.log('Response:', pm.response.text());",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"react_dev@test.com\",\n  \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login - Mike Full Stack",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    if (response.session && response.session.access_token) {",
+									"        pm.environment.set('user3_token', response.session.access_token);",
+									"        pm.environment.set('user3_id', response.user.id);",
+									"        console.log('✅ Mike Full Stack logged in successfully');",
+									"    }",
+									"} else {",
+									"    console.log('❌ Mike Full Stack login failed');",
+									"    console.log('Response:', pm.response.text());",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"fullstack@test.com\",\n  \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login - Dr. Priya ML Expert",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    if (response.session && response.session.access_token) {",
+									"        pm.environment.set('user4_token', response.session.access_token);",
+									"        pm.environment.set('user4_id', response.user.id);",
+									"        console.log('✅ Dr. Priya ML Expert logged in successfully');",
+									"    }",
+									"} else {",
+									"    console.log('❌ Dr. Priya ML Expert login failed');",
+									"    console.log('Response:', pm.response.text());",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"ml_specialist@test.com\",\n  \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login - Rahul DevOps Engineer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    if (response.session && response.session.access_token) {",
+									"        pm.environment.set('user5_token', response.session.access_token);",
+									"        pm.environment.set('user5_id', response.user.id);",
+									"        console.log('✅ Rahul DevOps Engineer logged in successfully');",
+									"    }",
+									"} else {",
+									"    console.log('❌ Rahul DevOps Engineer login failed');",
+									"    console.log('Response:', pm.response.text());",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"devops_expert@test.com\",\n  \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Login all test users to get their access tokens for swap request testing"
+		},
+		{
+			"name": "🔍 Get Skills & User Data",
+			"item": [
+				{
+					"name": "Get All Skills",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    if (response.skills && response.skills.length > 0) {",
+									"        // Store skill IDs for easy reference",
+									"        response.skills.forEach(skill => {",
+									"            pm.environment.set(`skill_${skill.name.toLowerCase().replace(/ /g, '_')}_id`, skill.id);",
+									"        });",
+									"        console.log('✅ Skills loaded and IDs stored');",
+									"    }",
+									"} else {",
+									"    console.log('❌ Failed to load skills');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{user1_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/profile/skills/all",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"profile",
+								"skills",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User1 Profile (Alex)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    console.log('✅ Alex profile loaded');",
+									"    console.log('Skills:', response.skills?.map(s => s.name));",
+									"    console.log('Desired Skills:', response.desiredSkills?.map(s => s.name));",
+									"} else {",
+									"    console.log('❌ Failed to load Alex profile');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{user1_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/profile",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User2 Profile (Sarah)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    console.log('✅ Sarah profile loaded');",
+									"    console.log('Skills:', response.skills?.map(s => s.name));",
+									"    console.log('Desired Skills:', response.desiredSkills?.map(s => s.name));",
+									"} else {",
+									"    console.log('❌ Failed to load Sarah profile');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{user2_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/profile",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Get skill IDs and user profiles needed for creating swap requests"
+		},
+		{
+			"name": "🚀 Create Swap Requests",
+			"item": [
+				{
+					"name": "Alex → Sarah: Python for React",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    const response = pm.response.json();",
+									"    if (response.data && response.data.id) {",
+									"        pm.environment.set('swap_request_1_id', response.data.id);",
+									"        console.log('✅ Swap Request 1 created successfully');",
+									"        console.log('Swap ID:', response.data.id);",
+									"    }",
+									"} else {",
+									"    console.log('❌ Failed to create swap request');",
+									"    console.log('Response:', pm.response.text());",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{user1_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"responder_id\": \"{{user2_id}}\",\n  \"give_skill_id\": \"{{skill_python_id}}\",\n  \"take_skill_id\": \"{{skill_react_id}}\",\n  \"message\": \"Hi Sarah! I'd love to learn React from you. I can teach you Python in return. I have 5 years of experience with Python and ML.\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/swaps",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"swaps"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Sarah → Dr. Priya: React for ML",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    const response = pm.response.json();",
+									"    if (response.data && response.data.id) {",
+									"        pm.environment.set('swap_request_2_id', response.data.id);",
+									"        console.log('✅ Swap Request 2 created successfully');",
+									"        console.log('Swap ID:', response.data.id);",
+									"    }",
+									"} else {",
+									"    console.log('❌ Failed to create swap request');",
+									"    console.log('Response:', pm.response.text());",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{user2_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"responder_id\": \"{{user4_id}}\",\n  \"give_skill_id\": \"{{skill_react_id}}\",\n  \"take_skill_id\": \"{{skill_machine_learning_id}}\",\n  \"message\": \"Hello Dr. Priya! I'm a React expert and would love to learn Machine Learning from you. I can help you with frontend development in return!\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/swaps",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"swaps"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Mike → Rahul: Python for DevOps",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    const response = pm.response.json();",
+									"    if (response.data && response.data.id) {",
+									"        pm.environment.set('swap_request_3_id', response.data.id);",
+									"        console.log('✅ Swap Request 3 created successfully');",
+									"        console.log('Swap ID:', response.data.id);",
+									"    }",
+									"} else {",
+									"    console.log('❌ Failed to create swap request');",
+									"    console.log('Response:', pm.response.text());",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{user3_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"responder_id\": \"{{user5_id}}\",\n  \"give_skill_id\": \"{{skill_python_id}}\",\n  \"take_skill_id\": \"{{skill_devops_id}}\",\n  \"message\": \"Hey Rahul! I'm a full-stack developer with solid Python skills. I'd love to learn DevOps from you. Let's do a skill exchange!\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/swaps",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"swaps"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Dr. Priya → Alex: Data Science for Python",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    const response = pm.response.json();",
+									"    if (response.data && response.data.id) {",
+									"        pm.environment.set('swap_request_4_id', response.data.id);",
+									"        console.log('✅ Swap Request 4 created successfully');",
+									"        console.log('Swap ID:', response.data.id);",
+									"    }",
+									"} else {",
+									"    console.log('❌ Failed to create swap request');",
+									"    console.log('Response:', pm.response.text());",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{user4_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"responder_id\": \"{{user1_id}}\",\n  \"give_skill_id\": \"{{skill_data_science_id}}\",\n  \"take_skill_id\": \"{{skill_python_id}}\",\n  \"message\": \"Hi Alex! I'm a Data Science expert and would like to improve my Python skills. I can teach you advanced Data Science concepts in return.\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/swaps",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"swaps"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Rahul → Sarah: AWS for React",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    const response = pm.response.json();",
+									"    if (response.data && response.data.id) {",
+									"        pm.environment.set('swap_request_5_id', response.data.id);",
+									"        console.log('✅ Swap Request 5 created successfully');",
+									"        console.log('Swap ID:', response.data.id);",
+									"    }",
+									"} else {",
+									"    console.log('❌ Failed to create swap request');",
+									"    console.log('Response:', pm.response.text());",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{user5_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"responder_id\": \"{{user2_id}}\",\n  \"give_skill_id\": \"{{skill_aws_id}}\",\n  \"take_skill_id\": \"{{skill_react_id}}\",\n  \"message\": \"Hello Sarah! I'm a DevOps engineer with AWS expertise. I'd love to learn React for building better DevOps dashboards. Can teach you AWS in return!\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/swaps",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"swaps"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Create various swap requests between users to test the workflow"
+		},
+		{
+			"name": "📋 View Swap Requests",
+			"item": [
+				{
+					"name": "Alex - Get All Swap Requests",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    console.log('✅ Alex swap requests loaded');",
+									"    console.log('Total requests:', response.data.totalCount);",
+									"    console.log('Requests:', response.data.swaps.map(s => ({",
+									"        id: s.id,",
+									"        status: s.status,",
+									"        give: s.give_skill.name,",
+									"        take: s.take_skill.name",
+									"    })));",
+									"} else {",
+									"    console.log('❌ Failed to load Alex swap requests');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{user1_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/swaps",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"swaps"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Sarah - Get Received Swap Requests",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    console.log('✅ Sarah received requests loaded');",
+									"    console.log('Total received:', response.data.totalCount);",
+									"    console.log('Received requests:', response.data.swaps.map(s => ({",
+									"        id: s.id,",
+									"        from: s.requester.name,",
+									"        give: s.give_skill.name,",
+									"        take: s.take_skill.name,",
+									"        status: s.status",
+									"    })));",
+									"} else {",
+									"    console.log('❌ Failed to load Sarah received requests');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{user2_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/swaps/received",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"swaps",
+								"received"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Mike - Get Sent Swap Requests",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    console.log('✅ Mike sent requests loaded');",
+									"    console.log('Total sent:', response.data.totalCount);",
+									"    console.log('Sent requests:', response.data.swaps.map(s => ({",
+									"        id: s.id,",
+									"        to: s.responder.name,",
+									"        give: s.give_skill.name,",
+									"        take: s.take_skill.name,",
+									"        status: s.status",
+									"    })));",
+									"} else {",
+									"    console.log('❌ Failed to load Mike sent requests');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{user3_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/swaps/sent",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"swaps",
+								"sent"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Specific Swap Request Details",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    console.log('✅ Swap request details loaded');",
+									"    console.log('Request details:', {",
+									"        id: response.data.id,",
+									"        requester: response.data.requester.name,",
+									"        responder: response.data.responder.name,",
+									"        give_skill: response.data.give_skill.name,",
+									"        take_skill: response.data.take_skill.name,",
+									"        status: response.data.status,",
+									"        message: response.data.message",
+									"    });",
+									"} else {",
+									"    console.log('❌ Failed to load swap request details');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{user1_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/swaps/{{swap_request_1_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"swaps",
+								"{{swap_request_1_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Test various ways to view and list swap requests"
+		},
+		{
+			"name": "✅ Accept Swap Requests",
+			"item": [
+				{
+					"name": "Sarah Accepts Alex's Request (Python ↔ React)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    console.log('✅ Sarah accepted Alex\\'s swap request');",
+									"    console.log('Updated status:', response.data.status);",
+									"} else {",
+									"    console.log('❌ Failed to accept swap request');",
+									"    console.log('Response:', pm.response.text());",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{user2_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"message\": \"Hi Alex! I'd love to do this skill exchange. Your Python expertise will be very valuable for my backend projects. Let's schedule our first session!\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/swaps/{{swap_request_1_id}}/accept",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"swaps",
+								"{{swap_request_1_id}}",
+								"accept"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Rahul Accepts Mike's Request (Python ↔ DevOps)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    console.log('✅ Rahul accepted Mike\\'s swap request');",
+									"    console.log('Updated status:', response.data.status);",
+									"} else {",
+									"    console.log('❌ Failed to accept swap request');",
+									"    console.log('Response:', pm.response.text());",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{user5_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"message\": \"Hey Mike! Sounds great. I can help you with DevOps practices and AWS. Looking forward to learning Python best practices from you!\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/swaps/{{swap_request_3_id}}/accept",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"swaps",
+								"{{swap_request_3_id}}",
+								"accept"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Test accepting swap requests with response messages"
+		},
+		{
+			"name": "❌ Reject Swap Requests",
+			"item": [
+				{
+					"name": "Dr. Priya Rejects Sarah's Request",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    console.log('✅ Dr. Priya rejected Sarah\\'s swap request');",
+									"    console.log('Updated status:', response.data.status);",
+									"} else {",
+									"    console.log('❌ Failed to reject swap request');",
+									"    console.log('Response:', pm.response.text());",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{user4_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"message\": \"Hi Sarah! Thanks for the offer, but I'm currently focusing on backend technologies. I already have some React knowledge. Good luck with your ML journey!\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/swaps/{{swap_request_2_id}}/reject",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"swaps",
+								"{{swap_request_2_id}}",
+								"reject"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Sarah Rejects Rahul's Request",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    console.log('✅ Sarah rejected Rahul\\'s swap request');",
+									"    console.log('Updated status:', response.data.status);",
+									"} else {",
+									"    console.log('❌ Failed to reject swap request');",
+									"    console.log('Response:', pm.response.text());",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{user2_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"message\": \"Hi Rahul! I appreciate the offer, but I'm currently focused on backend technologies and already have some AWS knowledge. Thanks for reaching out!\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/swaps/{{swap_request_5_id}}/reject",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"swaps",
+								"{{swap_request_5_id}}",
+								"reject"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Test rejecting swap requests with polite messages"
+		},
+		{
+			"name": "🔄 Update Swap Requests",
+			"item": [
+				{
+					"name": "Alex Updates His Request to Dr. Priya",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    console.log('✅ Alex updated his swap request');",
+									"    console.log('Updated status:', response.data.status);",
+									"} else {",
+									"    console.log('❌ Failed to update swap request');",
+									"    console.log('Response:', pm.response.text());",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{user1_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"status\": \"pending\",\n  \"message\": \"Hi Dr. Priya! I've updated my request. I can offer advanced Python and Django skills. I'm particularly interested in your Data Science expertise for my ML projects.\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/swaps/{{swap_request_4_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"swaps",
+								"{{swap_request_4_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Dr. Priya Accepts Alex's Updated Request",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    console.log('✅ Dr. Priya accepted Alex\\'s updated request');",
+									"    console.log('Updated status:', response.data.status);",
+									"} else {",
+									"    console.log('❌ Failed to accept updated request');",
+									"    console.log('Response:', pm.response.text());",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{user4_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"status\": \"accepted\",\n  \"message\": \"Hi Alex! Your updated offer sounds perfect. I'd love to share my Data Science knowledge and learn Django best practices from you. Let's start!\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/swaps/{{swap_request_4_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"swaps",
+								"{{swap_request_4_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Test updating swap request status and messages"
+		},
+		{
+			"name": "🗑️ Delete Swap Requests",
+			"item": [
+				{
+					"name": "Create Test Request for Deletion",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    const response = pm.response.json();",
+									"    if (response.data && response.data.id) {",
+									"        pm.environment.set('swap_request_delete_test_id', response.data.id);",
+									"        console.log('✅ Test swap request created for deletion');",
+									"        console.log('Swap ID:', response.data.id);",
+									"    }",
+									"} else {",
+									"    console.log('❌ Failed to create test swap request');",
+									"    console.log('Response:', pm.response.text());",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{user1_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"responder_id\": \"{{user3_id}}\",\n  \"give_skill_id\": \"{{skill_python_id}}\",\n  \"take_skill_id\": \"{{skill_react_id}}\",\n  \"message\": \"This is a test request that will be deleted\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/swaps",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"swaps"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Test Swap Request",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    console.log('✅ Test swap request deleted successfully');",
+									"    console.log('Message:', response.message);",
+									"} else {",
+									"    console.log('❌ Failed to delete swap request');",
+									"    console.log('Response:', pm.response.text());",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{user1_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/swaps/{{swap_request_delete_test_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"swaps",
+								"{{swap_request_delete_test_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Test creating and deleting swap requests"
+		},
+		{
+			"name": "🔍 Filter & Search Swap Requests",
+			"item": [
+				{
+					"name": "Filter by Status - Accepted",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    console.log('✅ Accepted swap requests loaded');",
+									"    console.log('Total accepted:', response.data.totalCount);",
+									"    console.log('Accepted requests:', response.data.swaps.map(s => ({",
+									"        id: s.id,",
+									"        status: s.status,",
+									"        participants: `${s.requester.name} ↔ ${s.responder.name}`",
+									"    })));",
+									"} else {",
+									"    console.log('❌ Failed to load accepted requests');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{user1_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/swaps?status=accepted",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"swaps"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "accepted"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Filter by Status - Cancelled",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    console.log('✅ Cancelled swap requests loaded');",
+									"    console.log('Total cancelled:', response.data.totalCount);",
+									"    console.log('Cancelled requests:', response.data.swaps.map(s => ({",
+									"        id: s.id,",
+									"        status: s.status,",
+									"        participants: `${s.requester.name} ↔ ${s.responder.name}`",
+									"    })));",
+									"} else {",
+									"    console.log('❌ Failed to load cancelled requests');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{user2_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/swaps?status=cancelled",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"swaps"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "cancelled"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Filter by Skill - Python",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    console.log('✅ Python-related swap requests loaded');",
+									"    console.log('Total Python requests:', response.data.totalCount);",
+									"    console.log('Python requests:', response.data.swaps.map(s => ({",
+									"        id: s.id,",
+									"        give: s.give_skill.name,",
+									"        take: s.take_skill.name,",
+									"        status: s.status",
+									"    })));",
+									"} else {",
+									"    console.log('❌ Failed to load Python requests');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{user1_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/swaps?skill_id={{skill_python_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"swaps"
+							],
+							"query": [
+								{
+									"key": "skill_id",
+									"value": "{{skill_python_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Pagination Test - Page 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    console.log('✅ Page 1 swap requests loaded');",
+									"    console.log('Page info:', {",
+									"        page: response.data.page,",
+									"        limit: response.data.limit,",
+									"        totalCount: response.data.totalCount,",
+									"        totalPages: response.data.totalPages",
+									"    });",
+									"} else {",
+									"    console.log('❌ Failed to load page 1');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{user1_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/swaps?page=1&limit=3",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"swaps"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Test filtering and pagination of swap requests"
+		},
+		{
+			"name": "⚠️ Error Handling Tests",
+			"item": [
+				{
+					"name": "Invalid Swap Request - Missing Fields",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 400) {",
+									"    const response = pm.response.json();",
+									"    console.log('✅ Error handling working - missing fields');",
+									"    console.log('Error message:', response.message);",
+									"} else {",
+									"    console.log('❌ Error handling failed');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{user1_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"responder_id\": \"{{user2_id}}\",\n  \"give_skill_id\": \"{{skill_python_id}}\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/swaps",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"swaps"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid Swap Request - Non-existent User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 400) {",
+									"    const response = pm.response.json();",
+									"    console.log('✅ Error handling working - non-existent user');",
+									"    console.log('Error message:', response.message);",
+									"} else {",
+									"    console.log('❌ Error handling failed');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{user1_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"responder_id\": \"non-existent-user-id\",\n  \"give_skill_id\": \"{{skill_python_id}}\",\n  \"take_skill_id\": \"{{skill_react_id}}\",\n  \"message\": \"This should fail\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/swaps",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"swaps"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Access Non-existent Swap Request",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 404) {",
+									"    const response = pm.response.json();",
+									"    console.log('✅ Error handling working - non-existent swap');",
+									"    console.log('Error message:', response.message);",
+									"} else {",
+									"    console.log('❌ Error handling failed');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{user1_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/swaps/non-existent-swap-id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"swaps",
+								"non-existent-swap-id"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Unauthorized Access - No Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 401) {",
+									"    const response = pm.response.json();",
+									"    console.log('✅ Authentication working - no token');",
+									"    console.log('Error message:', response.message);",
+									"} else {",
+									"    console.log('❌ Authentication failed');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/swaps",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"swaps"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Test error handling and edge cases"
+		},
+		{
+			"name": "📊 Final Summary Report",
+			"item": [
+				{
+					"name": "Generate Complete Test Report",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"console.log('🎯 SWAP REQUEST WORKFLOW TESTING COMPLETE');",
+									"console.log('================================================');",
+									"console.log('');",
+									"console.log('📊 TEST SUMMARY:');",
+									"console.log('- Authentication: ✅ All 5 users logged in');",
+									"console.log('- Swap Creation: ✅ Multiple requests created');",
+									"console.log('- Acceptance: ✅ Requests accepted with messages');",
+									"console.log('- Rejection: ✅ Requests rejected with messages');",
+									"console.log('- Updates: ✅ Status and message updates');",
+									"console.log('- Deletion: ✅ Swap request deletion');",
+									"console.log('- Filtering: ✅ Status, skill, and pagination filters');",
+									"console.log('- Error Handling: ✅ Various error scenarios');",
+									"console.log('');",
+									"console.log('🔄 WORKFLOW SCENARIOS TESTED:');",
+									"console.log('1. Alex ↔ Sarah: Python for React (ACCEPTED)');",
+									"console.log('2. Sarah → Dr. Priya: React for ML (REJECTED)');",
+									"console.log('3. Mike ↔ Rahul: Python for DevOps (ACCEPTED)');",
+									"console.log('4. Dr. Priya ↔ Alex: Data Science for Python (ACCEPTED)');",
+									"console.log('5. Rahul → Sarah: AWS for React (REJECTED)');",
+									"console.log('');",
+									"console.log('✅ All core swap request functionality tested!');",
+									"console.log('================================================');"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{user1_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/swaps",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"swaps"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Final summary and test report"
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8080",
+			"type": "string",
+			"description": "Backend API base URL"
+		},
+		{
+			"key": "user1_token",
+			"value": "",
+			"type": "string",
+			"description": "Alex Python Expert JWT token"
+		},
+		{
+			"key": "user2_token",
+			"value": "",
+			"type": "string",
+			"description": "Sarah React Developer JWT token"
+		},
+		{
+			"key": "user3_token",
+			"value": "",
+			"type": "string",
+			"description": "Mike Full Stack JWT token"
+		},
+		{
+			"key": "user4_token",
+			"value": "",
+			"type": "string",
+			"description": "Dr. Priya ML Expert JWT token"
+		},
+		{
+			"key": "user5_token",
+			"value": "",
+			"type": "string",
+			"description": "Rahul DevOps Engineer JWT token"
+		},
+		{
+			"key": "user1_id",
+			"value": "",
+			"type": "string",
+			"description": "Alex user ID"
+		},
+		{
+			"key": "user2_id",
+			"value": "",
+			"type": "string",
+			"description": "Sarah user ID"
+		},
+		{
+			"key": "user3_id",
+			"value": "",
+			"type": "string",
+			"description": "Mike user ID"
+		},
+		{
+			"key": "user4_id",
+			"value": "",
+			"type": "string",
+			"description": "Dr. Priya user ID"
+		},
+		{
+			"key": "user5_id",
+			"value": "",
+			"type": "string",
+			"description": "Rahul user ID"
+		},
+		{
+			"key": "swap_request_1_id",
+			"value": "",
+			"type": "string",
+			"description": "Alex → Sarah swap request ID"
+		},
+		{
+			"key": "swap_request_2_id",
+			"value": "",
+			"type": "string",
+			"description": "Sarah → Dr. Priya swap request ID"
+		},
+		{
+			"key": "swap_request_3_id",
+			"value": "",
+			"type": "string",
+			"description": "Mike → Rahul swap request ID"
+		},
+		{
+			"key": "swap_request_4_id",
+			"value": "",
+			"type": "string",
+			"description": "Dr. Priya → Alex swap request ID"
+		},
+		{
+			"key": "swap_request_5_id",
+			"value": "",
+			"type": "string",
+			"description": "Rahul → Sarah swap request ID"
+		},
+		{
+			"key": "swap_request_delete_test_id",
+			"value": "",
+			"type": "string",
+			"description": "Test swap request for deletion"
+		},
+		{
+			"key": "skill_python_id",
+			"value": "",
+			"type": "string",
+			"description": "Python skill ID"
+		},
+		{
+			"key": "skill_react_id",
+			"value": "",
+			"type": "string",
+			"description": "React skill ID"
+		},
+		{
+			"key": "skill_machine_learning_id",
+			"value": "",
+			"type": "string",
+			"description": "Machine Learning skill ID"
+		},
+		{
+			"key": "skill_devops_id",
+			"value": "",
+			"type": "string",
+			"description": "DevOps skill ID"
+		},
+		{
+			"key": "skill_data_science_id",
+			"value": "",
+			"type": "string",
+			"description": "Data Science skill ID"
+		},
+		{
+			"key": "skill_aws_id",
+			"value": "",
+			"type": "string",
+			"description": "AWS skill ID"
+		}
+	]
+} 

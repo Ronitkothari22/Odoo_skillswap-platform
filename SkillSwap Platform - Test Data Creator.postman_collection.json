@@ -1,0 +1,1180 @@
+{
+	"info": {
+		"_postman_id": "784ab1a7-d8e8-46c9-99bb-48177212b1bd",
+		"name": "SkillSwap Platform - Test Data Creator",
+		"description": "Automated collection to create multiple test users with complete profiles for testing Discovery & Matching features",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "45950426",
+		"_collection_link": "https://joining-dots-developer.postman.co/workspace/SKILLSWAP~eef88a55-f5f2-485f-85a6-34232bce6b88/collection/45950426-784ab1a7-d8e8-46c9-99bb-48177212b1bd?action=share&source=collection_link&creator=45950426"
+	},
+	"item": [
+		{
+			"name": "🔄 Run All - Create Test Users",
+			"item": [
+				{
+					"name": "User 1 - Python Expert",
+					"item": [
+						{
+							"name": "1.1 Create Python Expert",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"if (pm.response.code === 201) {",
+											"    const response = pm.response.json();",
+											"    if (response.session && response.session.access_token) {",
+											"        pm.environment.set('user1_token', response.session.access_token);",
+											"        pm.environment.set('user1_id', response.user.id);",
+											"        console.log('User 1 created successfully with token');",
+											"    }",
+											"} else {",
+											"    console.log('User 1 creation failed or user already exists');",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"email\": \"python_expert@test.com\",\n  \"password\": \"password123\",\n  \"name\": \"Alex Python Expert\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/auth/signup",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"signup"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "1.2 Update Python Expert Profile",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"// Wait a moment to ensure token is set",
+											"setTimeout(() => {}, 100);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{user1_token}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"Alex Python Expert\",\n  \"location\": \"Mumbai, India\",\n  \"visibility\": true\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/profile",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"profile"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "1.3 Add Python Expert Skills",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{user1_token}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"skills\": [\n    {\n      \"name\": \"Python\",\n      \"proficiency\": 5\n    },\n    {\n      \"name\": \"Machine Learning\",\n      \"proficiency\": 4\n    },\n    {\n      \"name\": \"Data Science\",\n      \"proficiency\": 4\n    },\n    {\n      \"name\": \"Django\",\n      \"proficiency\": 3\n    }\n  ]\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/profile/skills",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"profile",
+										"skills"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "1.4 Add Python Expert Desired Skills",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{user1_token}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"skills\": [\n    {\n      \"name\": \"React\",\n      \"priority\": 4\n    },\n    {\n      \"name\": \"JavaScript\",\n      \"priority\": 3\n    },\n    {\n      \"name\": \"Node.js\",\n      \"priority\": 2\n    }\n  ]\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/profile/desired-skills",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"profile",
+										"desired-skills"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "1.5 Add Python Expert Availability",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{user1_token}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"slots\": [\n    {\n      \"weekday\": 1,\n      \"start_time\": \"10:00\",\n      \"end_time\": \"14:00\"\n    },\n    {\n      \"weekday\": 3,\n      \"start_time\": \"09:00\",\n      \"end_time\": \"13:00\"\n    },\n    {\n      \"weekday\": 5,\n      \"start_time\": \"15:00\",\n      \"end_time\": \"18:00\"\n    }\n  ]\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/profile/availability",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"profile",
+										"availability"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "User 2 - React Developer",
+					"item": [
+						{
+							"name": "2.1 Create React Developer",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"if (pm.response.code === 201) {",
+											"    const response = pm.response.json();",
+											"    if (response.session && response.session.access_token) {",
+											"        pm.environment.set('user2_token', response.session.access_token);",
+											"        pm.environment.set('user2_id', response.user.id);",
+											"        console.log('User 2 created successfully with token');",
+											"    }",
+											"} else {",
+											"    console.log('User 2 creation failed or user already exists');",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"email\": \"react_dev@test.com\",\n  \"password\": \"password123\",\n  \"name\": \"Sarah React Developer\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/auth/signup",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"signup"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "2.2 Update React Developer Profile",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{user2_token}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"Sarah React Developer\",\n  \"location\": \"Bangalore, India\",\n  \"visibility\": true\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/profile",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"profile"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "2.3 Add React Developer Skills",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{user2_token}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"skills\": [\n    {\n      \"name\": \"React\",\n      \"proficiency\": 5\n    },\n    {\n      \"name\": \"JavaScript\",\n      \"proficiency\": 4\n    },\n    {\n      \"name\": \"Node.js\",\n      \"proficiency\": 3\n    },\n    {\n      \"name\": \"CSS\",\n      \"proficiency\": 4\n    }\n  ]\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/profile/skills",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"profile",
+										"skills"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "2.4 Add React Developer Desired Skills",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{user2_token}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"skills\": [\n    {\n      \"name\": \"Python\",\n      \"priority\": 5\n    },\n    {\n      \"name\": \"Machine Learning\",\n      \"priority\": 4\n    },\n    {\n      \"name\": \"DevOps\",\n      \"priority\": 3\n    }\n  ]\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/profile/desired-skills",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"profile",
+										"desired-skills"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "2.5 Add React Developer Availability",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{user2_token}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"slots\": [\n    {\n      \"weekday\": 1,\n      \"start_time\": \"14:00\",\n      \"end_time\": \"18:00\"\n    },\n    {\n      \"weekday\": 2,\n      \"start_time\": \"10:00\",\n      \"end_time\": \"15:00\"\n    },\n    {\n      \"weekday\": 4,\n      \"start_time\": \"09:00\",\n      \"end_time\": \"12:00\"\n    }\n  ]\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/profile/availability",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"profile",
+										"availability"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "User 3 - Full Stack Developer",
+					"item": [
+						{
+							"name": "3.1 Create Full Stack Developer",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"if (pm.response.code === 201) {",
+											"    const response = pm.response.json();",
+											"    if (response.session && response.session.access_token) {",
+											"        pm.environment.set('user3_token', response.session.access_token);",
+											"        pm.environment.set('user3_id', response.user.id);",
+											"        console.log('User 3 created successfully with token');",
+											"    }",
+											"} else {",
+											"    console.log('User 3 creation failed or user already exists');",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"email\": \"fullstack@test.com\",\n  \"password\": \"password123\",\n  \"name\": \"Mike Full Stack\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/auth/signup",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"signup"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "3.2 Update Full Stack Profile",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{user3_token}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"Mike Full Stack\",\n  \"location\": \"Delhi, India\",\n  \"visibility\": true\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/profile",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"profile"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "3.3 Add Full Stack Skills",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{user3_token}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"skills\": [\n    {\n      \"name\": \"React\",\n      \"proficiency\": 4\n    },\n    {\n      \"name\": \"Python\",\n      \"proficiency\": 4\n    },\n    {\n      \"name\": \"Node.js\",\n      \"proficiency\": 4\n    },\n    {\n      \"name\": \"SQL\",\n      \"proficiency\": 3\n    }\n  ]\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/profile/skills",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"profile",
+										"skills"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "3.4 Add Full Stack Desired Skills",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{user3_token}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"skills\": [\n    {\n      \"name\": \"DevOps\",\n      \"priority\": 4\n    },\n    {\n      \"name\": \"AWS\",\n      \"priority\": 3\n    },\n    {\n      \"name\": \"Kubernetes\",\n      \"priority\": 2\n    }\n  ]\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/profile/desired-skills",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"profile",
+										"desired-skills"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "3.5 Add Full Stack Availability",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{user3_token}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"slots\": [\n    {\n      \"weekday\": 1,\n      \"start_time\": \"09:00\",\n      \"end_time\": \"12:00\"\n    },\n    {\n      \"weekday\": 3,\n      \"start_time\": \"10:00\",\n      \"end_time\": \"15:00\"\n    },\n    {\n      \"weekday\": 5,\n      \"start_time\": \"14:00\",\n      \"end_time\": \"17:00\"\n    }\n  ]\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/profile/availability",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"profile",
+										"availability"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "User 4 - ML Specialist",
+					"item": [
+						{
+							"name": "4.1 Create ML Specialist",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"if (pm.response.code === 201) {",
+											"    const response = pm.response.json();",
+											"    if (response.session && response.session.access_token) {",
+											"        pm.environment.set('user4_token', response.session.access_token);",
+											"        pm.environment.set('user4_id', response.user.id);",
+											"        console.log('User 4 created successfully with token');",
+											"    }",
+											"} else {",
+											"    console.log('User 4 creation failed or user already exists');",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"email\": \"ml_specialist@test.com\",\n  \"password\": \"password123\",\n  \"name\": \"Dr. Priya ML Expert\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/auth/signup",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"signup"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "4.2 Update ML Specialist Profile",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{user4_token}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"Dr. Priya ML Expert\",\n  \"location\": \"Hyderabad, India\",\n  \"visibility\": true\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/profile",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"profile"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "4.3 Add ML Specialist Skills",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{user4_token}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"skills\": [\n    {\n      \"name\": \"Machine Learning\",\n      \"proficiency\": 5\n    },\n    {\n      \"name\": \"Data Science\",\n      \"proficiency\": 5\n    },\n    {\n      \"name\": \"Python\",\n      \"proficiency\": 4\n    },\n    {\n      \"name\": \"TensorFlow\",\n      \"proficiency\": 4\n    }\n  ]\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/profile/skills",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"profile",
+										"skills"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "4.4 Add ML Specialist Desired Skills",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{user4_token}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"skills\": [\n    {\n      \"name\": \"React\",\n      \"priority\": 3\n    },\n    {\n      \"name\": \"Web Development\",\n      \"priority\": 2\n    },\n    {\n      \"name\": \"JavaScript\",\n      \"priority\": 2\n    }\n  ]\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/profile/desired-skills",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"profile",
+										"desired-skills"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "4.5 Add ML Specialist Availability",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{user4_token}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"slots\": [\n    {\n      \"weekday\": 2,\n      \"start_time\": \"11:00\",\n      \"end_time\": \"16:00\"\n    },\n    {\n      \"weekday\": 4,\n      \"start_time\": \"09:00\",\n      \"end_time\": \"13:00\"\n    },\n    {\n      \"weekday\": 6,\n      \"start_time\": \"10:00\",\n      \"end_time\": \"14:00\"\n    }\n  ]\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/profile/availability",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"profile",
+										"availability"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "User 5 - DevOps Engineer",
+					"item": [
+						{
+							"name": "5.1 Create DevOps Engineer",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"if (pm.response.code === 201) {",
+											"    const response = pm.response.json();",
+											"    if (response.session && response.session.access_token) {",
+											"        pm.environment.set('user5_token', response.session.access_token);",
+											"        pm.environment.set('user5_id', response.user.id);",
+											"        console.log('User 5 created successfully with token');",
+											"    }",
+											"} else {",
+											"    console.log('User 5 creation failed or user already exists');",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"email\": \"devops_expert@test.com\",\n  \"password\": \"password123\",\n  \"name\": \"Rahul DevOps Engineer\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/auth/signup",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"signup"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "5.2 Update DevOps Profile",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{user5_token}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"Rahul DevOps Engineer\",\n  \"location\": \"Pune, India\",\n  \"visibility\": true\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/profile",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"profile"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "5.3 Add DevOps Skills",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{user5_token}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"skills\": [\n    {\n      \"name\": \"DevOps\",\n      \"proficiency\": 5\n    },\n    {\n      \"name\": \"AWS\",\n      \"proficiency\": 4\n    },\n    {\n      \"name\": \"Docker\",\n      \"proficiency\": 4\n    },\n    {\n      \"name\": \"Kubernetes\",\n      \"proficiency\": 3\n    }\n  ]\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/profile/skills",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"profile",
+										"skills"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "5.4 Add DevOps Desired Skills",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{user5_token}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"skills\": [\n    {\n      \"name\": \"Python\",\n      \"priority\": 4\n    },\n    {\n      \"name\": \"Machine Learning\",\n      \"priority\": 3\n    },\n    {\n      \"name\": \"Data Science\",\n      \"priority\": 2\n    }\n  ]\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/profile/desired-skills",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"profile",
+										"desired-skills"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "5.5 Add DevOps Availability",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{user5_token}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"slots\": [\n    {\n      \"weekday\": 1,\n      \"start_time\": \"18:00\",\n      \"end_time\": \"21:00\"\n    },\n    {\n      \"weekday\": 3,\n      \"start_time\": \"19:00\",\n      \"end_time\": \"22:00\"\n    },\n    {\n      \"weekday\": 6,\n      \"start_time\": \"09:00\",\n      \"end_time\": \"15:00\"\n    }\n  ]\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/profile/availability",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"profile",
+										"availability"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			],
+			"description": "Creates 5 complete test users with diverse skills and profiles for testing Discovery & Matching features"
+		},
+		{
+			"name": "🧪 Test Discovery & Matching",
+			"item": [
+				{
+					"name": "Test Search - React & Python",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{user1_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/discovery/search?skills=React,Python&location=India&page=1&limit=10",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"discovery",
+								"search"
+							],
+							"query": [
+								{
+									"key": "skills",
+									"value": "React,Python"
+								},
+								{
+									"key": "location",
+									"value": "India"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Test Get Matches",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{user1_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/matching/matches?page=1&limit=10&minCompatibility=0.3",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"matching",
+								"matches"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "minCompatibility",
+									"value": "0.3"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Test Perfect Matches",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{user1_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/matching/perfect?page=1&limit=5",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"matching",
+								"perfect"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Test Discovery Stats",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/discovery/stats",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"discovery",
+								"stats"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Test Matching Stats",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/matching/stats",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"matching",
+								"stats"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Test endpoints to verify the created users work with Discovery & Matching features"
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8080",
+			"type": "string"
+		},
+		{
+			"key": "access_token",
+			"value": "your-main-jwt-token-here",
+			"type": "string"
+		},
+		{
+			"key": "user1_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "user2_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "user3_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "user4_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "user5_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "user1_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "user2_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "user3_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "user4_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "user5_id",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
