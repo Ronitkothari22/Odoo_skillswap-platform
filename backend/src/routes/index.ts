@@ -6,6 +6,7 @@ import discoveryRoutes from './discovery.routes';
 import publicDiscoveryRoutes from './public-discovery.routes';
 import matchingRoutes from './matching.routes';
 import swapRoutes from './swap.routes';
+import feedbackRoutes from './feedback.routes';
 
 const router = Router();
 
@@ -19,7 +20,8 @@ router.get('/', (_req: Request, res: Response) => {
       skillDiscovery: 'Available',
       publicSkillDiscovery: 'Available (No Auth Required)',
       intelligentMatching: 'Available',
-      swapRequests: 'Available'
+      swapRequests: 'Available',
+      feedbackSystem: 'Available'
     }
   });
 });
@@ -31,5 +33,6 @@ router.use('/discovery', discoveryRoutes);
 router.use('/public/discovery', publicDiscoveryRoutes);
 router.use('/matching', matchingRoutes);
 router.use('/swaps', swapRoutes);
+router.use('/feedback', feedbackRoutes);
 
 export default router; 

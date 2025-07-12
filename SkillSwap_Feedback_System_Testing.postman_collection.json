@@ -1,0 +1,808 @@
+{
+	"info": {
+		"_postman_id": "feedback-system-testing",
+		"name": "SkillSwap Feedback System Testing",
+		"description": "Complete testing collection for the SkillSwap Platform Feedback & Trust System module. This collection includes all feedback-related endpoints with proper authentication, test scenarios, and error handling.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{auth_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"exec": [
+					"// Set default base URL if not already set",
+					"if (!pm.environment.get('base_url')) {",
+					"    pm.environment.set('base_url', 'http://localhost:3000/api');",
+					"}",
+					"",
+					"// Check if auth token is available",
+					"if (!pm.environment.get('auth_token')) {",
+					"    console.log('Warning: No auth token set. Please login first or set the auth_token environment variable.');",
+					"}"
+				],
+				"type": "text/javascript"
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"exec": [
+					"// Global test for all requests",
+					"pm.test('Response time is less than 5000ms', function () {",
+					"    pm.expect(pm.response.responseTime).to.be.below(5000);",
+					"});",
+					"",
+					"// Check if response has proper structure",
+					"if (pm.response.code === 200 || pm.response.code === 201) {",
+					"    pm.test('Response has success field', function () {",
+					"        pm.expect(pm.response.json()).to.have.property('success');",
+					"    });",
+					"}"
+				],
+				"type": "text/javascript"
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:3000/api",
+			"type": "string"
+		},
+		{
+			"key": "auth_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "user_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "swap_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "feedback_id",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "Authentication Setup",
+			"item": [
+				{
+					"name": "Login User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Login successful', function () {",
+									"    pm.response.to.have.status(200);",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson.success).to.be.true;",
+									"    pm.expect(responseJson.session).to.exist;",
+									"});",
+									"",
+									"// Store auth token and user ID",
+									"if (pm.response.code === 200) {",
+									"    const responseJson = pm.response.json();",
+									"    if (responseJson.session && responseJson.session.access_token) {",
+									"        pm.environment.set('auth_token', responseJson.session.access_token);",
+									"        pm.environment.set('user_id', responseJson.user.id);",
+									"        console.log('Auth token and user ID saved to environment');",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"test@example.com\",\n    \"password\": \"testpassword123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Authentication endpoints for setting up test environment"
+		},
+		{
+			"name": "Feedback Management",
+			"item": [
+				{
+					"name": "Create Feedback",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Feedback created successfully', function () {",
+									"    pm.response.to.have.status(201);",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson.success).to.be.true;",
+									"    pm.expect(responseJson.data).to.exist;",
+									"    pm.expect(responseJson.data.id).to.exist;",
+									"    pm.expect(responseJson.data.stars).to.exist;",
+									"});",
+									"",
+									"// Store feedback ID for later use",
+									"if (pm.response.code === 201) {",
+									"    const responseJson = pm.response.json();",
+									"    pm.environment.set('feedback_id', responseJson.data.id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"swap_id\": \"{{swap_id}}\",\n    \"stars\": 5,\n    \"comment\": \"Excellent experience! Very knowledgeable and patient teacher. Highly recommend.\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/feedback",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"feedback"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Feedback - Invalid Data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Invalid feedback rejected', function () {",
+									"    pm.response.to.have.status(400);",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson.success).to.be.false;",
+									"    pm.expect(responseJson.message).to.exist;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"swap_id\": \"invalid-swap-id\",\n    \"stars\": 10,\n    \"comment\": \"Invalid stars rating\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/feedback",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"feedback"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Feedback by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Feedback retrieved successfully', function () {",
+									"    pm.response.to.have.status(200);",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson.success).to.be.true;",
+									"    pm.expect(responseJson.data).to.exist;",
+									"    pm.expect(responseJson.data.id).to.exist;",
+									"    pm.expect(responseJson.data.stars).to.exist;",
+									"    pm.expect(responseJson.data.from_user).to.exist;",
+									"    pm.expect(responseJson.data.to_user).to.exist;",
+									"    pm.expect(responseJson.data.swap).to.exist;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/feedback/details/{{feedback_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"feedback",
+								"details",
+								"{{feedback_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints for creating and managing feedback"
+		},
+		{
+			"name": "User Feedback Analytics",
+			"item": [
+				{
+					"name": "Get My Feedback Stats",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Feedback stats retrieved successfully', function () {",
+									"    pm.response.to.have.status(200);",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson.success).to.be.true;",
+									"    pm.expect(responseJson.data).to.exist;",
+									"    pm.expect(responseJson.data.total_given).to.exist;",
+									"    pm.expect(responseJson.data.total_received).to.exist;",
+									"    pm.expect(responseJson.data.average_given).to.exist;",
+									"    pm.expect(responseJson.data.average_received).to.exist;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/feedback/stats",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"feedback",
+								"stats"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get My Feedback",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('My feedback retrieved successfully', function () {",
+									"    pm.response.to.have.status(200);",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson.success).to.be.true;",
+									"    pm.expect(responseJson.data).to.exist;",
+									"    pm.expect(responseJson.data.feedback).to.be.an('array');",
+									"    pm.expect(responseJson.data.totalCount).to.exist;",
+									"    pm.expect(responseJson.data.page).to.exist;",
+									"    pm.expect(responseJson.data.limit).to.exist;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/feedback/me?page=1&limit=10",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"feedback",
+								"me"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get My Feedback - Filtered by Stars",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Filtered feedback retrieved successfully', function () {",
+									"    pm.response.to.have.status(200);",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson.success).to.be.true;",
+									"    pm.expect(responseJson.data.feedback).to.be.an('array');",
+									"    ",
+									"    // Check if all feedback has the requested star rating",
+									"    if (responseJson.data.feedback.length > 0) {",
+									"        responseJson.data.feedback.forEach(function(feedback) {",
+									"            pm.expect(feedback.stars).to.equal(5);",
+									"        });",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/feedback/me?stars=5&page=1&limit=10",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"feedback",
+								"me"
+							],
+							"query": [
+								{
+									"key": "stars",
+									"value": "5"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get My Feedback - Date Range Filter",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Date filtered feedback retrieved successfully', function () {",
+									"    pm.response.to.have.status(200);",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson.success).to.be.true;",
+									"    pm.expect(responseJson.data.feedback).to.be.an('array');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/feedback/me?date_from=2024-01-01&date_to=2024-12-31&page=1&limit=10",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"feedback",
+								"me"
+							],
+							"query": [
+								{
+									"key": "date_from",
+									"value": "2024-01-01"
+								},
+								{
+									"key": "date_to",
+									"value": "2024-12-31"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints for user feedback analytics and personal feedback management"
+		},
+		{
+			"name": "Public Feedback Queries",
+			"item": [
+				{
+					"name": "Get User Feedback Summary",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('User feedback summary retrieved successfully', function () {",
+									"    pm.response.to.have.status(200);",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson.success).to.be.true;",
+									"    pm.expect(responseJson.data).to.exist;",
+									"    pm.expect(responseJson.data.user_id).to.exist;",
+									"    pm.expect(responseJson.data.user_name).to.exist;",
+									"    pm.expect(responseJson.data.rating_avg).to.exist;",
+									"    pm.expect(responseJson.data.total_feedback_count).to.exist;",
+									"    pm.expect(responseJson.data.feedback_breakdown).to.exist;",
+									"    pm.expect(responseJson.data.recent_feedback).to.be.an('array');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/feedback/{{user_id}}?limit=5",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"feedback",
+								"{{user_id}}"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User Feedback List",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('User feedback list retrieved successfully', function () {",
+									"    pm.response.to.have.status(200);",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson.success).to.be.true;",
+									"    pm.expect(responseJson.data).to.exist;",
+									"    pm.expect(responseJson.data.feedback).to.be.an('array');",
+									"    pm.expect(responseJson.data.totalCount).to.exist;",
+									"    pm.expect(responseJson.data.page).to.exist;",
+									"    pm.expect(responseJson.data.limit).to.exist;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/feedback/user/{{user_id}}?page=1&limit=10",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"feedback",
+								"user",
+								"{{user_id}}"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User Feedback - Specific Star Rating",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Filtered user feedback retrieved successfully', function () {",
+									"    pm.response.to.have.status(200);",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson.success).to.be.true;",
+									"    pm.expect(responseJson.data.feedback).to.be.an('array');",
+									"    ",
+									"    // Check if all feedback has the requested star rating",
+									"    if (responseJson.data.feedback.length > 0) {",
+									"        responseJson.data.feedback.forEach(function(feedback) {",
+									"            pm.expect(feedback.stars).to.equal(4);",
+									"        });",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/feedback/user/{{user_id}}?stars=4&page=1&limit=10",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"feedback",
+								"user",
+								"{{user_id}}"
+							],
+							"query": [
+								{
+									"key": "stars",
+									"value": "4"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints for querying public feedback data for users"
+		},
+		{
+			"name": "Admin Functions",
+			"item": [
+				{
+					"name": "Recalculate User Rating",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('User rating recalculated successfully', function () {",
+									"    pm.response.to.have.status(200);",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson.success).to.be.true;",
+									"    pm.expect(responseJson.data).to.exist;",
+									"    pm.expect(responseJson.data.user_id).to.exist;",
+									"    pm.expect(responseJson.data.new_rating).to.exist;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{}"
+						},
+						"url": {
+							"raw": "{{base_url}}/feedback/recalculate/{{user_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"feedback",
+								"recalculate",
+								"{{user_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Administrative functions for feedback management"
+		},
+		{
+			"name": "Error Handling Tests",
+			"item": [
+				{
+					"name": "Unauthorized Access",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Unauthorized access rejected', function () {",
+									"    pm.response.to.have.status(401);",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson.success).to.be.false;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/feedback/stats",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"feedback",
+								"stats"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid Feedback ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Invalid feedback ID handled correctly', function () {",
+									"    pm.response.to.have.status(404);",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson.success).to.be.false;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/feedback/details/invalid-feedback-id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"feedback",
+								"details",
+								"invalid-feedback-id"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Missing Required Fields",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Missing required fields handled correctly', function () {",
+									"    pm.response.to.have.status(400);",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson.success).to.be.false;",
+									"    pm.expect(responseJson.message).to.include('required');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"comment\": \"Missing swap_id and stars\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/feedback",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"feedback"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Test cases for error handling and edge cases"
+		}
+	]
+} 
