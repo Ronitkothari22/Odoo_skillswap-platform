@@ -1,0 +1,92 @@
+{
+  "info": {
+    "name": "SkillSwap Auth API",
+    "description": "Authentication endpoints for SkillSwap Platform"
+  },
+  "item": [
+    {
+      "name": "1. Signup",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"password123\",\n  \"name\": \"Test User\"\n}"
+        },
+        "url": "http://localhost:5000/api/auth/signup"
+      }
+    },
+    {
+      "name": "2. Login",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"password123\"\n}"
+        },
+        "url": "http://localhost:5000/api/auth/login"
+      }
+    },
+    {
+      "name": "3. Google OAuth URL",
+      "request": {
+        "method": "GET",
+        "url": "http://localhost:5000/api/auth/google?redirectTo=http://localhost:5173/dashboard"
+      }
+    },
+    {
+      "name": "4. Get Current User",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer YOUR_ACCESS_TOKEN_HERE"
+          }
+        ],
+        "url": "http://localhost:5000/api/auth/me"
+      }
+    },
+    {
+      "name": "5. Refresh Session",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"refresh_token\": \"YOUR_REFRESH_TOKEN_HERE\"\n}"
+        },
+        "url": "http://localhost:5000/api/auth/refresh"
+      }
+    },
+    {
+      "name": "6. Logout",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer YOUR_ACCESS_TOKEN_HERE"
+          }
+        ],
+        "url": "http://localhost:5000/api/auth/logout"
+      }
+    }
+  ]
+} 
