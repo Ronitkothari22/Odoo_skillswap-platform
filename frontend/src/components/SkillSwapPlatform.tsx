@@ -66,6 +66,7 @@ function SkillSwapPlatform() {
   });
 
   const handleRequest = (userId: string, userName: string) => {
+    console.log('Swap request sent to user:', userId, userName);
     alert(`Swap request sent to ${userName}!`);
   };
 

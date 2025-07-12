@@ -1,11 +1,12 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
+import { authService } from '../services/authService';
 
 interface User {
   id: string;
@@ -16,11 +17,43 @@ interface User {
   availability: string;
 }
 
+interface AuthenticatedUser {
+  id: string;
+  email: string;
+  name: string;
+  avatar_url?: string;
+  authType: 'regular' | 'google';
+  profile?: any;
+}
+
 function Dashboard() {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [availabilityFilter, setAvailabilityFilter] = useState('All');
+  const [currentUser, setCurrentUser] = useState<AuthenticatedUser | null>(null);
   
+  // Check authentication and get user data
+  useEffect(() => {
+    if (!authService.isAuthenticated()) {
+      navigate('/signin');
+      return;
+    }
+
+    // Get user data from localStorage
+    const userData = localStorage.getItem('user');
+    if (userData) {
+      try {
+        const parsedUser = JSON.parse(userData);
+        setCurrentUser(parsedUser);
+      } catch (error) {
+        console.error('Error parsing user data:', error);
+        navigate('/signin');
+      }
+    } else {
+      navigate('/signin');
+    }
+  }, [navigate]);
+
   // Mock data for users
   const users: User[] = [
     {
@@ -63,6 +96,40 @@ function Dashboard() {
     navigate(`/user/${userId}`);
   };
 
+  const handleLogout = async () => {
+    try {
+      await authService.logout();
+      navigate('/signin');
+    } catch (error) {
+      console.error('Logout error:', error);
+      // Force logout by clearing localStorage
+      localStorage.clear();
+      navigate('/signin');
+    }
+  };
+
+  // Generate user initials for avatar
+  const getUserInitials = (name: string) => {
+    return name
+      .split(' ')
+      .map(n => n[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2);
+  };
+
+  // Show loading or redirect if user not loaded
+  if (!currentUser) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -71,18 +138,36 @@ function Dashboard() {
           <div className="flex justify-between items-center h-16">
             <h1 className="text-xl font-bold text-gray-900">Skill Swap Platform</h1>
             <div className="flex items-center space-x-4">
+              <span className="text-sm text-gray-600 hidden sm:block">
+                Welcome, {currentUser.name}!
+              </span>
               <Button 
                 onClick={handleSwapRequest}
                 className="bg-blue-600 text-white hover:bg-blue-700 rounded-md px-4 py-2"
               >
                 Swap request
               </Button>
-              <Avatar 
-                className="h-10 w-10 cursor-pointer" 
-                onClick={handleProfile}
-              >
-                <AvatarFallback className="bg-blue-100 text-blue-600">JD</AvatarFallback>
-              </Avatar>
+              <div className="flex items-center space-x-2">
+                <Avatar 
+                  className="h-10 w-10 cursor-pointer" 
+                  onClick={handleProfile}
+                >
+                  {currentUser.avatar_url ? (
+                    <AvatarImage src={currentUser.avatar_url} alt={currentUser.name} />
+                  ) : null}
+                  <AvatarFallback className="bg-blue-100 text-blue-600">
+                    {getUserInitials(currentUser.name)}
+                  </AvatarFallback>
+                </Avatar>
+                <Button
+                  onClick={handleLogout}
+                  variant="outline"
+                  size="sm"
+                  className="text-gray-600 hover:text-red-600"
+                >
+                  Logout
+                </Button>
+              </div>
             </div>
           </div>
         </div>
