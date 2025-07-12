@@ -1,3 +1,5 @@
+import { config } from '../config/config';
+
 // Swap request service for frontend API communication
 
 export interface SwapRequest {
@@ -67,10 +69,10 @@ export interface SwapRequestListResponse {
 }
 
 class SwapService {
-  private baseUrl = process.env.REACT_APP_API_URL || 'http://localhost:8080/api';
+  private baseUrl = `${config.API_BASE_URL}/api`;
 
   private async getAuthToken(): Promise<string | null> {
-    return localStorage.getItem('token');
+    return localStorage.getItem('access_token');
   }
 
   private async makeRequest<T>(

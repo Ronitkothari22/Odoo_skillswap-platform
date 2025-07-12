@@ -25,8 +25,9 @@ function SignUp() {
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
-    // Clear error when user starts typing
+    // Clear error and success when user starts typing
     if (error) setError('');
+    if (success) setSuccess('');
   };
 
   const validateForm = () => {
@@ -193,6 +194,18 @@ function SignUp() {
             >
               {isLoading ? 'Creating Account...' : 'Create Account'}
             </Button>
+
+            {/* Error/Success Messages */}
+            {error && (
+              <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">
+                {error}
+              </div>
+            )}
+            {success && (
+              <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg text-green-600 text-sm">
+                {success}
+              </div>
+            )}
           </div>
           
           {/* Sign in section */}

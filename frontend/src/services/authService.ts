@@ -297,6 +297,50 @@ class AuthService {
     return localStorage.getItem('access_token');
   }
 
+  // Debug method to check authentication state
+  getAuthDebugInfo(): {
+    isAuthenticated: boolean;
+    hasToken: boolean;
+    hasRefreshToken: boolean;
+    tokenExpiresAt: string | null;
+    isExpired: boolean;
+    timeUntilExpiry: number | null;
+  } {
+    const token = localStorage.getItem('access_token');
+    const refreshToken = localStorage.getItem('refresh_token');
+    const expiresAt = localStorage.getItem('token_expires_at');
+    
+    const now = Date.now();
+    const isExpired = expiresAt ? now >= parseInt(expiresAt) : true;
+    const timeUntilExpiry = expiresAt ? parseInt(expiresAt) - now : null;
+    
+    return {
+      isAuthenticated: this.isAuthenticated(),
+      hasToken: !!token,
+      hasRefreshToken: !!refreshToken,
+      tokenExpiresAt: expiresAt,
+      isExpired,
+      timeUntilExpiry
+    };
+  }
+
+  // Debug method to log authentication state
+  logAuthState(): void {
+    const debugInfo = this.getAuthDebugInfo();
+    console.log('🔍 Authentication Debug Info:');
+    console.log('  - Is Authenticated:', debugInfo.isAuthenticated);
+    console.log('  - Has Token:', debugInfo.hasToken);
+    console.log('  - Has Refresh Token:', debugInfo.hasRefreshToken);
+    console.log('  - Token Expires At:', debugInfo.tokenExpiresAt);
+    console.log('  - Is Expired:', debugInfo.isExpired);
+    console.log('  - Time Until Expiry:', debugInfo.timeUntilExpiry);
+    
+    if (debugInfo.tokenExpiresAt) {
+      const expiryDate = new Date(parseInt(debugInfo.tokenExpiresAt));
+      console.log('  - Expiry Date:', expiryDate.toLocaleString());
+    }
+  }
+
   // Initialize Google OAuth (for direct Google Sign-In)
   async initializeGoogleOAuth(): Promise<boolean> {
     try {
