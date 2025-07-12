@@ -98,40 +98,40 @@ function SignIn() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8 bg-white p-4 rounded-2xl border-2 border-indigo-200 shadow-sm">
-          <h1 className="text-xl font-bold text-gray-900">Skill Swap Platform</h1>
+        {/* Header with improved styling */}
+        <div className="flex items-center justify-between mb-8 bg-white/90 backdrop-blur-sm p-5 rounded-2xl border-2 border-indigo-200 shadow-md">
+          <h1 className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Skill Swap Platform</h1>
           <Button 
             onClick={handleHome}
             variant="outline"
-            className="border-2 border-indigo-300 rounded-full px-6 py-2 font-semibold text-sm hover:bg-indigo-50 text-indigo-700"
+            className="border-2 border-indigo-300 rounded-full px-6 py-2 font-semibold text-sm hover:bg-indigo-50 text-indigo-700 transition-all duration-200"
           >
             Home
           </Button>
         </div>
 
-        {/* Sign In Form */}
-        <Card className="border-2 border-indigo-200 rounded-3xl bg-white shadow-xl">
+        {/* Sign In Form with improved styling */}
+        <Card className="border-2 border-indigo-200 rounded-3xl bg-white/95 backdrop-blur-sm shadow-xl overflow-hidden">
           <CardContent className="p-8 space-y-6">
             <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold text-gray-900 mb-2">Welcome Back</h2>
+              <h2 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-2">Welcome Back</h2>
               <p className="text-gray-600">Sign in to your account</p>
             </div>
 
             {/* Error Message */}
             {error && (
-              <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
-                <p className="text-red-600 text-sm">{error}</p>
+              <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4 animate-pulse">
+                <p className="text-red-600 text-sm font-medium">{error}</p>
               </div>
             )}
 
-            {/* Google Sign-In Button */}
+            {/* Google Sign-In Button with improved styling */}
             <div className="space-y-4">
               <div className="flex flex-col items-center">
                 <Button
                   onClick={handleGoogleSignIn}
                   disabled={isLoading}
-                  className="w-full bg-white border-2 border-gray-300 text-gray-700 hover:bg-gray-50 rounded-xl h-12 font-medium flex items-center justify-center gap-3"
+                  className="w-full bg-white border-2 border-gray-300 text-gray-700 hover:bg-gray-50 rounded-xl h-12 font-medium flex items-center justify-center gap-3 transition-all duration-200 hover:shadow-md"
                 >
                   <svg className="w-5 h-5" viewBox="0 0 24 24">
                     <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -143,15 +143,15 @@ function SignIn() {
                 </Button>
               </div>
               
-              {/* Divider */}
-              <div className="flex items-center justify-center">
-                <div className="flex-1 border-t border-gray-300"></div>
-                <span className="px-4 text-gray-500 text-sm">or</span>
-                <div className="flex-1 border-t border-gray-300"></div>
+              {/* Divider with improved styling */}
+              <div className="flex items-center justify-center my-2">
+                <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
+                <span className="px-4 text-gray-500 text-sm font-medium">or</span>
+                <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
               </div>
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-5">
               <div>
                 <label className="block text-sm font-semibold text-gray-900 mb-2">Email</label>
                 <Input
@@ -159,7 +159,7 @@ function SignIn() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter your email"
-                  className="border-2 border-gray-300 rounded-xl h-12 text-base focus:border-indigo-500"
+                  className="border-2 border-gray-300 rounded-xl h-12 text-base focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all duration-200"
                   disabled={isLoading}
                 />
               </div>
@@ -171,18 +171,18 @@ function SignIn() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter your password"
-                  className="border-2 border-gray-300 rounded-xl h-12 text-base focus:border-indigo-500"
+                  className="border-2 border-gray-300 rounded-xl h-12 text-base focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all duration-200"
                   disabled={isLoading}
                   onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
                 />
               </div>
             </div>
 
-            <div className="flex justify-center pt-4">
+            <div className="flex justify-center pt-5">
               <Button 
                 onClick={handleLogin}
                 disabled={isLoading}
-                className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700 border-0 rounded-full px-12 py-3 font-semibold text-base shadow-lg transform hover:scale-105 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700 border-0 rounded-full px-12 py-3 font-semibold text-base shadow-lg transform hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
               >
                 {isLoading ? 'Signing in...' : 'Login'}
               </Button>
@@ -191,20 +191,20 @@ function SignIn() {
             <div className="text-center">
               <button 
                 onClick={handleForgotPassword}
-                className="text-indigo-600 hover:text-indigo-800 text-sm font-medium underline"
+                className="text-indigo-600 hover:text-indigo-800 text-sm font-medium underline transition-colors duration-200"
                 disabled={isLoading}
               >
                 Forgot username/password
               </button>
             </div>
 
-            <div className="text-center border-t border-gray-200 pt-6">
+            <div className="text-center border-t border-gray-200 pt-6 mt-4">
               <p className="text-gray-600 text-sm mb-3">Don&apos;t have an account?</p>
               <Button 
                 onClick={handleSignUp}
                 variant="outline"
                 disabled={isLoading}
-                className="border-2 border-indigo-300 rounded-xl px-6 py-2 font-semibold text-sm hover:bg-indigo-50 text-indigo-700 disabled:opacity-50"
+                className="border-2 border-indigo-300 rounded-xl px-6 py-2 font-semibold text-sm hover:bg-indigo-50 text-indigo-700 disabled:opacity-50 transition-all duration-200"
               >
                 Sign Up
               </Button>
