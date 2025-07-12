@@ -1,17 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
-import { 
-  Select, 
-  SelectContent, 
-  SelectItem, 
-  SelectTrigger, 
-  SelectValue 
-} from '@/components/ui/select';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
-import swapService from '../services/swapService';
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { swapService } from '@/services/swapService';
+import { config } from '@/config/config';
 
 interface User {
   id: string;
@@ -65,82 +60,60 @@ function SwapRequestForm() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const loadData = async () => {
-      try {
-        setLoading(true);
-        setError(null);
+        const loadData = async () => {
+    try {
+      setLoading(true);
+      setError(null);
 
-        // Load target user profile and current user profile
-        const [targetUserResponse, currentUserResponse] = await Promise.all([
-          fetch(`/api/users/${userId}`, {
-            headers: {
-              'Authorization': `Bearer ${localStorage.getItem('token')}`
-            }
-          }),
-          fetch('/api/profile', {
-            headers: {
-              'Authorization': `Bearer ${localStorage.getItem('token')}`
-            }
-          })
-        ]);
+      console.log('Loading data for userId:', userId);
+      console.log('API Base URL:', config.API_BASE_URL);
 
-        if (!targetUserResponse.ok || !currentUserResponse.ok) {
-          throw new Error('Failed to load user data');
-        }
+      // Load current user profile and target user profile
+      const [currentUserResponse, targetUserResponse] = await Promise.all([
+        fetch(`${config.API_BASE_URL}/api/profile`, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+          }
+        }),
+        fetch(`${config.API_BASE_URL}/api/users/${userId}`, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+          }
+        })
+      ]);
 
-        const targetUserData = await targetUserResponse.json();
-        const currentUserData = await currentUserResponse.json();
+      console.log('Current user response status:', currentUserResponse.status);
+      console.log('Target user response status:', targetUserResponse.status);
 
-        setUser(targetUserData.data);
-        setCurrentUser(currentUserData.data);
-      } catch (error) {
-        console.error('Error loading data:', error);
-        setError('Failed to load user data. Please try again.');
-        // Fallback to mock data for development
-        const mockUser: User = {
-          id: userId || '1',
-          name: 'Marc Demo',
-          avatar_url: '',
-          location: 'San Francisco, CA',
-          skills: [
-            { id: '1', name: 'Web Design', proficiency: 4 },
-            { id: '2', name: 'UI/UX', proficiency: 5 },
-            { id: '3', name: 'JavaScript', proficiency: 3 }
-          ],
-          desiredSkills: [
-            { id: '4', name: 'Marketing', priority: 5 },
-            { id: '5', name: 'SEO', priority: 4 },
-            { id: '6', name: 'Content Writing', priority: 3 }
-          ],
-          availability: [
-            { id: '1', weekday: 6, start_time: '09:00', end_time: '17:00' },
-            { id: '2', weekday: 0, start_time: '10:00', end_time: '16:00' }
-          ],
-          rating_avg: 4.5
-        };
-
-        const mockCurrentUser: CurrentUserProfile = {
-          id: 'current-user-id',
-          name: 'Current User',
-          skills: [
-            { id: '7', name: 'JavaScript', proficiency: 5 },
-            { id: '8', name: 'React', proficiency: 4 },
-            { id: '9', name: 'Node.js', proficiency: 4 },
-            { id: '10', name: 'UI Design', proficiency: 3 },
-            { id: '11', name: 'Python', proficiency: 3 }
-          ],
-          desiredSkills: [
-            { id: '12', name: 'Web Design', priority: 4 },
-            { id: '13', name: 'UI/UX', priority: 5 }
-          ]
-        };
-
-        setUser(mockUser);
-        setCurrentUser(mockCurrentUser);
-      } finally {
-        setLoading(false);
+      if (!currentUserResponse.ok) {
+        console.error('Current user response error:', currentUserResponse.status, currentUserResponse.statusText);
+        const errorText = await currentUserResponse.text();
+        console.error('Current user error body:', errorText);
+        throw new Error(`Failed to load current user: ${currentUserResponse.status}`);
       }
-    };
+
+      if (!targetUserResponse.ok) {
+        console.error('Target user response error:', targetUserResponse.status, targetUserResponse.statusText);
+        const errorText = await targetUserResponse.text();
+        console.error('Target user error body:', errorText);
+        throw new Error(`Failed to load target user: ${targetUserResponse.status}`);
+      }
+
+      const currentUserData = await currentUserResponse.json();
+      const targetUserData = await targetUserResponse.json();
+
+      console.log('Current user data:', currentUserData);
+      console.log('Target user data:', targetUserData);
+
+      setCurrentUser(currentUserData.profile);
+      setUser(targetUserData.user);
+    } catch (error) {
+      console.error('Error loading data:', error);
+      setError(`Failed to load user data. Please try again. Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    } finally {
+      setLoading(false);
+    }
+  };
 
     if (userId) {
       loadData();
@@ -160,6 +133,13 @@ function SwapRequestForm() {
   };
 
   const handleSubmit = async () => {
+    console.log('=== SWAP REQUEST DEBUG ===');
+    console.log('selectedOfferedSkill:', selectedOfferedSkill);
+    console.log('selectedWantedSkill:', selectedWantedSkill);
+    console.log('currentUser.skills:', currentUser?.skills);
+    console.log('user.skills:', user?.skills);
+    console.log('user.desiredSkills:', user?.desiredSkills);
+    
     if (!selectedOfferedSkill) {
       setError('Please select a skill you are offering');
       return;
@@ -186,6 +166,7 @@ function SwapRequestForm() {
         message: message || undefined
       };
 
+      console.log('Sending swap request:', swapRequestData);
       const response = await swapService.createSwapRequest(swapRequestData);
 
       if (response.success) {
@@ -362,7 +343,15 @@ function SwapRequestForm() {
                   </div>
                 )}
 
-                {wantedSkillsFiltered.length === 0 && (
+                {user.skills.length === 0 && (
+                  <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-md">
+                    <p className="text-red-700">
+                      ⚠️ {user.name} hasn't added any skills to their profile yet. You cannot create a swap request with them until they add skills they can teach.
+                    </p>
+                  </div>
+                )}
+
+                {user.skills.length > 0 && wantedSkillsFiltered.length === 0 && (
                   <div className="mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-md">
                     <p className="text-yellow-700">
                       {user.name} doesn't have any skills that you're looking for. You can still request any of their available skills.
@@ -435,10 +424,10 @@ function SwapRequestForm() {
                     </Button>
                     <Button 
                       onClick={handleSubmit}
-                      disabled={submitting}
-                      className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3"
+                      disabled={submitting || user.skills.length === 0}
+                      className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      {submitting ? 'Sending...' : 'Send Request'}
+                      {submitting ? 'Sending...' : user.skills.length === 0 ? 'Cannot Send - No Skills Available' : 'Send Request'}
                     </Button>
                   </div>
                 </div>

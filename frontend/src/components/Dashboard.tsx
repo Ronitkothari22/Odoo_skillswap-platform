@@ -107,15 +107,15 @@ function Dashboard() {
       loadInitialData();
     }
   };
-
+  
   const handleProfile = () => {
     navigate('/profile');
   };
-
+  
   const handleSwapRequest = () => {
     navigate('/swap-requests');
   };
-
+  
   const handleUserProfile = (userId: string) => {
     navigate(`/user/${userId}`);
   };
@@ -325,6 +325,12 @@ function Dashboard() {
               >
                 Swap Requests
               </Button>
+              <Button 
+                onClick={() => navigate('/feedback')}
+                className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white rounded-full px-4 py-2 text-sm font-medium transition-all duration-200 hover:scale-105 shadow-md"
+              >
+                Feedback
+              </Button>
               <div className="flex items-center space-x-2">
                 <Avatar 
                   className="h-10 w-10 cursor-pointer ring-2 ring-blue-200 hover:ring-blue-300 transition-all duration-200" 
@@ -393,8 +399,8 @@ function Dashboard() {
                 />
               </div>
               <div className="w-full md:w-48">
-                <input
-                  type="text"
+              <input
+                type="text"
                   placeholder="Location filter..."
                   value={locationFilter}
                   onChange={(e) => setLocationFilter(e.target.value)}
@@ -434,17 +440,17 @@ function Dashboard() {
                   <div className="text-center py-8">
                     <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full animate-spin mb-4">
                       <div className="w-3 h-3 bg-white rounded-full"></div>
-                    </div>
+          </div>
                     <p className="text-gray-600">Loading users...</p>
-                  </div>
+        </div>
                 ) : (discoveredUsers || []).length === 0 ? (
                   <div className="text-center py-8">
                     <p className="text-gray-600">No users found. Try adjusting your search criteria.</p>
-                  </div>
+      </div>
                 ) : (
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     {(discoveredUsers || []).map(user => renderUserCard(user))}
-                  </div>
+                </div>
                 )}
               </TabsContent>
 
@@ -480,11 +486,11 @@ function Dashboard() {
                 ) : (perfectMatches || []).length === 0 ? (
                   <div className="text-center py-8">
                     <p className="text-gray-600">No perfect matches found. Try updating your skills and desired skills.</p>
-                  </div>
+                </div>
                 ) : (
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     {(perfectMatches || []).map(match => renderPerfectMatch(match))}
-                  </div>
+              </div>
                 )}
               </TabsContent>
             </div>

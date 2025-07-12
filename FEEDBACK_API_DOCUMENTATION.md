@@ -4,7 +4,7 @@
 
 The Feedback System API provides comprehensive functionality for managing feedback and ratings in the SkillSwap platform. Users can create feedback for completed skill swaps, view feedback statistics, and manage their feedback history.
 
-**Base URL:** `http://localhost:3000/api`
+**Base URL:** `http://localhost:8080/api`
 
 **Authentication:** All endpoints require Bearer token authentication
 

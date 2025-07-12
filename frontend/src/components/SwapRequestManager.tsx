@@ -2,9 +2,11 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Users, TrendingUp, Clock, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
 import swapService, { SwapRequest, SwapRequestStats } from '../services/swapService';
 
 interface SwapRequestManagerProps {
@@ -23,9 +25,12 @@ function SwapRequestManager({ initialTab = 'received' }: SwapRequestManagerProps
   const [showResponseModal, setShowResponseModal] = useState(false);
   const [responseMessage, setResponseMessage] = useState('');
   const [responseAction, setResponseAction] = useState<'accept' | 'reject'>('accept');
+  const [animate, setAnimate] = useState(false);
 
   useEffect(() => {
     loadData();
+    // Trigger animations after component mounts
+    setTimeout(() => setAnimate(true), 100);
   }, [activeTab]);
 
   const loadData = async () => {
@@ -126,6 +131,19 @@ function SwapRequestManager({ initialTab = 'received' }: SwapRequestManagerProps
     }
   };
 
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case 'pending':
+        return <AlertCircle className="h-4 w-4" />;
+      case 'accepted':
+        return <CheckCircle className="h-4 w-4" />;
+      case 'cancelled':
+        return <XCircle className="h-4 w-4" />;
+      default:
+        return <Clock className="h-4 w-4" />;
+    }
+  };
+
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -136,13 +154,21 @@ function SwapRequestManager({ initialTab = 'received' }: SwapRequestManagerProps
     });
   };
 
-  const renderRequestCard = (request: SwapRequest, isReceived: boolean) => (
-    <Card key={request.id} className="mb-4">
-      <CardHeader>
+  const renderRequestCard = (request: SwapRequest, isReceived: boolean, index: number = 0) => (
+    <Card 
+      key={request.id} 
+      className={`group bg-white border-0 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-2 rounded-2xl overflow-hidden mb-6 transform ${animate ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}
+      style={{ transitionDelay: `${100 + index * 100}ms` }}
+    >
+      <CardHeader className="pb-4">
         <div className="flex justify-between items-start">
           <div className="flex items-center space-x-4">
-            <Avatar className="h-12 w-12">
-              <AvatarFallback className="bg-blue-100 text-blue-600">
+            <Avatar className="h-16 w-16 ring-4 ring-gray-100 group-hover:ring-blue-200 transition-all duration-300">
+              <AvatarImage 
+                src={isReceived ? request.requester.avatar_url : request.responder.avatar_url} 
+                alt={isReceived ? request.requester.name : request.responder.name} 
+              />
+              <AvatarFallback className="bg-gradient-to-br from-blue-400 to-purple-500 text-white text-lg font-semibold">
                 {isReceived 
                   ? request.requester.name.split(' ').map(n => n[0]).join('')
                   : request.responder.name.split(' ').map(n => n[0]).join('')
@@ -150,67 +176,86 @@ function SwapRequestManager({ initialTab = 'received' }: SwapRequestManagerProps
               </AvatarFallback>
             </Avatar>
             <div>
-              <h3 className="text-lg font-semibold">
+              <h3 className="text-xl font-semibold text-gray-900 group-hover:text-blue-600 transition-colors duration-200">
                 {isReceived ? request.requester.name : request.responder.name}
               </h3>
-              <p className="text-sm text-gray-600">
-                Rating: {(isReceived ? request.requester.rating_avg : request.responder.rating_avg).toFixed(1)}/5
-              </p>
+              <div className="flex items-center mt-1">
+                <span className="text-sm text-gray-500 mr-2">Rating:</span>
+                <div className="flex items-center">
+                  <span className="text-sm font-medium text-gray-700">
+                    {(isReceived ? request.requester.rating_avg : request.responder.rating_avg).toFixed(1)}
+                  </span>
+                  <span className="text-yellow-400 ml-1">⭐</span>
+                </div>
+              </div>
             </div>
           </div>
           <div className="text-right">
-            <Badge className={getStatusColor(request.status)}>
+            <Badge className={`${getStatusColor(request.status)} flex items-center gap-1 transition-all duration-200 hover:scale-105`}>
+              {getStatusIcon(request.status)}
               {request.status.charAt(0).toUpperCase() + request.status.slice(1)}
             </Badge>
-            <p className="text-sm text-gray-600 mt-1">
+            <p className="text-sm text-gray-600 mt-2">
               {formatDate(request.created_at)}
             </p>
           </div>
         </div>
       </CardHeader>
       <CardContent>
-        <div className="space-y-3">
-          <div className="flex items-center justify-between">
-            <div className="flex-1">
-              <p className="text-sm font-medium text-gray-700">
-                {isReceived ? 'They offer:' : 'You offered:'}
-              </p>
-              <Badge className="bg-green-100 text-green-800 mt-1">
-                {request.give_skill.name}
-              </Badge>
-            </div>
-            <div className="mx-4 text-gray-400">⇄</div>
-            <div className="flex-1">
-              <p className="text-sm font-medium text-gray-700">
-                {isReceived ? 'They want:' : 'You want:'}
-              </p>
-              <Badge className="bg-blue-100 text-blue-800 mt-1">
-                {request.take_skill.name}
-              </Badge>
+        <div className="space-y-4">
+          {/* Skills Exchange */}
+          <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex-1">
+                <p className="text-sm font-medium text-gray-700 mb-2">
+                  {isReceived ? 'They offer:' : 'You offered:'}
+                </p>
+                <Badge className="bg-green-100 text-green-800 text-sm px-3 py-1 transition-all duration-200 hover:scale-105">
+                  {request.give_skill.name}
+                </Badge>
+              </div>
+              <div className="mx-6 flex items-center justify-center">
+                <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
+                  <span className="text-white font-bold">⇄</span>
+                </div>
+              </div>
+              <div className="flex-1 text-right">
+                <p className="text-sm font-medium text-gray-700 mb-2">
+                  {isReceived ? 'They want:' : 'You want:'}
+                </p>
+                <Badge className="bg-blue-100 text-blue-800 text-sm px-3 py-1 transition-all duration-200 hover:scale-105">
+                  {request.take_skill.name}
+                </Badge>
+              </div>
             </div>
           </div>
           
+          {/* Message */}
           {request.message && (
-            <div className="p-3 bg-gray-50 rounded-md">
-              <p className="text-sm text-gray-700">{request.message}</p>
+            <div className="bg-white border border-gray-200 rounded-xl p-4">
+              <h4 className="text-sm font-medium text-gray-700 mb-2">Message:</h4>
+              <p className="text-sm text-gray-700 italic">"{request.message}"</p>
             </div>
           )}
           
+          {/* Action Buttons */}
           {request.status === 'pending' && (
-            <div className="flex justify-end space-x-2">
+            <div className="flex justify-end space-x-3 pt-2">
               {isReceived ? (
                 <>
                   <Button
                     onClick={() => handleAcceptReject(request, 'reject')}
                     variant="outline"
-                    className="text-red-600 hover:text-red-700"
+                    className="text-red-600 hover:text-red-700 border-red-200 hover:border-red-300 transition-all duration-200 hover:scale-105"
                   >
+                    <XCircle className="h-4 w-4 mr-2" />
                     Reject
                   </Button>
                   <Button
                     onClick={() => handleAcceptReject(request, 'accept')}
-                    className="bg-green-600 hover:bg-green-700 text-white"
+                    className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white transition-all duration-200 hover:scale-105 shadow-md"
                   >
+                    <CheckCircle className="h-4 w-4 mr-2" />
                     Accept
                   </Button>
                 </>
@@ -218,11 +263,34 @@ function SwapRequestManager({ initialTab = 'received' }: SwapRequestManagerProps
                 <Button
                   onClick={() => handleWithdraw(request.id)}
                   variant="outline"
-                  className="text-red-600 hover:text-red-700"
+                  className="text-red-600 hover:text-red-700 border-red-200 hover:border-red-300 transition-all duration-200 hover:scale-105"
                 >
+                  <XCircle className="h-4 w-4 mr-2" />
                   Withdraw
                 </Button>
               )}
+            </div>
+          )}
+
+          {/* Status Message for completed requests */}
+          {request.status !== 'pending' && (
+            <div className={`rounded-xl p-3 ${
+              request.status === 'accepted' 
+                ? 'bg-green-50 border border-green-200' 
+                : 'bg-red-50 border border-red-200'
+            }`}>
+              <p className={`text-sm font-medium ${
+                request.status === 'accepted' ? 'text-green-700' : 'text-red-700'
+              }`}>
+                {request.status === 'accepted' 
+                  ? isReceived 
+                    ? 'You accepted this swap request' 
+                    : 'Your swap request was accepted'
+                  : isReceived 
+                    ? 'You rejected this swap request' 
+                    : 'Your swap request was rejected'
+                }
+              </p>
             </div>
           )}
         </div>
@@ -231,71 +299,111 @@ function SwapRequestManager({ initialTab = 'received' }: SwapRequestManagerProps
   );
 
   const renderStatsTab = () => (
-    <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">Sent Requests</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-blue-600">{stats?.totalSent || 0}</div>
+    <div className={`space-y-8 transform transition-all duration-1000 ${animate ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+      {/* Main Stats Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+          <CardContent className="p-6">
+            <div className="flex items-center space-x-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
+                <TrendingUp className="h-6 w-6 text-white" />
+              </div>
+              <div>
+                <div className="text-2xl font-bold text-gray-900">{stats?.totalSent || 0}</div>
+                <div className="text-sm text-gray-600">Sent Requests</div>
+              </div>
+            </div>
           </CardContent>
         </Card>
         
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">Received Requests</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-green-600">{stats?.totalReceived || 0}</div>
+        <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+          <CardContent className="p-6">
+            <div className="flex items-center space-x-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center">
+                <Users className="h-6 w-6 text-white" />
+              </div>
+              <div>
+                <div className="text-2xl font-bold text-gray-900">{stats?.totalReceived || 0}</div>
+                <div className="text-sm text-gray-600">Received Requests</div>
+              </div>
+            </div>
           </CardContent>
         </Card>
         
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">Accepted Swaps</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-purple-600">{stats?.totalAccepted || 0}</div>
+        <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+          <CardContent className="p-6">
+            <div className="flex items-center space-x-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center">
+                <CheckCircle className="h-6 w-6 text-white" />
+              </div>
+              <div>
+                <div className="text-2xl font-bold text-gray-900">{stats?.totalAccepted || 0}</div>
+                <div className="text-sm text-gray-600">Accepted Swaps</div>
+              </div>
+            </div>
           </CardContent>
         </Card>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">Pending Requests</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-yellow-600">{stats?.totalPending || 0}</div>
+      {/* Secondary Stats Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+          <CardContent className="p-6">
+            <div className="flex items-center space-x-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-xl flex items-center justify-center">
+                <Clock className="h-6 w-6 text-white" />
+              </div>
+              <div>
+                <div className="text-2xl font-bold text-gray-900">{stats?.totalPending || 0}</div>
+                <div className="text-sm text-gray-600">Pending Requests</div>
+              </div>
+            </div>
           </CardContent>
         </Card>
         
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">Cancelled Requests</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-red-600">{stats?.totalCancelled || 0}</div>
+        <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+          <CardContent className="p-6">
+            <div className="flex items-center space-x-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center">
+                <XCircle className="h-6 w-6 text-white" />
+              </div>
+              <div>
+                <div className="text-2xl font-bold text-gray-900">{stats?.totalCancelled || 0}</div>
+                <div className="text-sm text-gray-600">Cancelled Requests</div>
+              </div>
+            </div>
           </CardContent>
         </Card>
       </div>
       
+      {/* Recent Activity */}
       {stats?.recentSwaps && stats.recentSwaps.length > 0 && (
-        <Card>
+        <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg">
           <CardHeader>
-            <CardTitle className="text-lg">Recent Activity</CardTitle>
+            <CardTitle className="text-xl font-bold text-gray-900 flex items-center">
+              <Clock className="h-5 w-5 mr-2 text-blue-600" />
+              Recent Activity
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {stats.recentSwaps.slice(0, 5).map((swap) => (
-                <div key={swap.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-md">
-                  <div className="flex items-center space-x-3">
-                    <Badge className={getStatusColor(swap.status)}>
+              {stats.recentSwaps.slice(0, 5).map((swap, index) => (
+                <div 
+                  key={swap.id} 
+                  className={`flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl border border-gray-200 hover:shadow-md transition-all duration-300 transform ${animate ? 'translate-x-0 opacity-100' : 'translate-x-10 opacity-0'}`}
+                  style={{ transitionDelay: `${600 + index * 100}ms` }}
+                >
+                  <div className="flex items-center space-x-4">
+                    <Badge className={`${getStatusColor(swap.status)} flex items-center gap-1`}>
+                      {getStatusIcon(swap.status)}
                       {swap.status}
                     </Badge>
-                    <span className="text-sm">
-                      {swap.give_skill.name} ⇄ {swap.take_skill.name}
+                    <span className="text-sm font-medium text-gray-900">
+                      {swap.give_skill.name}
+                    </span>
+                    <span className="text-gray-400">⇄</span>
+                    <span className="text-sm font-medium text-gray-900">
+                      {swap.take_skill.name}
                     </span>
                   </div>
                   <span className="text-sm text-gray-600">
@@ -311,24 +419,30 @@ function SwapRequestManager({ initialTab = 'received' }: SwapRequestManagerProps
   );
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 sticky top-0 z-10">
+      <div className="sticky top-0 z-10 backdrop-blur-md bg-white/80 border-b border-gray-200 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <h1 className="text-xl font-bold text-gray-900">Swap Request Manager</h1>
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
+                <Users className="h-6 w-6 text-white" />
+              </div>
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                Swap Request Manager
+              </h1>
+            </div>
             <div className="flex items-center space-x-4">
               <Button 
                 onClick={() => navigate('/dashboard')}
                 variant="outline"
-                className="text-gray-700 hover:bg-gray-100"
+                className="border-2 border-blue-200 hover:border-blue-300 bg-white/80 backdrop-blur-sm rounded-xl px-4 py-2 font-semibold text-sm transition-all duration-200 hover:scale-105"
               >
                 Dashboard
               </Button>
               <Button 
                 onClick={() => navigate('/profile')}
-                variant="outline"
-                className="text-gray-700 hover:bg-gray-100"
+                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-xl px-4 py-2 font-semibold text-sm transition-all duration-200 hover:scale-105 shadow-lg"
               >
                 Profile
               </Button>
@@ -339,132 +453,117 @@ function SwapRequestManager({ initialTab = 'received' }: SwapRequestManagerProps
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Tabs */}
-        <div className="mb-8">
-          <div className="border-b border-gray-200">
-            <nav className="-mb-px flex space-x-8">
-              <button
-                onClick={() => setActiveTab('received')}
-                className={`py-2 px-1 border-b-2 font-medium text-sm ${
-                  activeTab === 'received'
-                    ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                }`}
-              >
-                Received Requests
-              </button>
-              <button
-                onClick={() => setActiveTab('sent')}
-                className={`py-2 px-1 border-b-2 font-medium text-sm ${
-                  activeTab === 'sent'
-                    ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                }`}
-              >
-                Sent Requests
-              </button>
-              <button
-                onClick={() => setActiveTab('stats')}
-                className={`py-2 px-1 border-b-2 font-medium text-sm ${
-                  activeTab === 'stats'
-                    ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                }`}
-              >
-                Statistics
-              </button>
-            </nav>
-          </div>
-        </div>
-
         {/* Error Message */}
         {error && (
-          <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-md">
+          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl">
             <p className="text-red-700">{error}</p>
           </div>
         )}
 
-        {/* Loading State */}
-        {loading && (
-          <div className="text-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-            <p className="text-gray-600">Loading...</p>
-          </div>
-        )}
+        {/* Tabs */}
+        <div className="bg-white/80 backdrop-blur-sm border-0 rounded-xl shadow-lg mb-8">
+          <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as 'received' | 'sent' | 'stats')}>
+            <TabsList className="grid w-full grid-cols-3 bg-gray-50 border-b border-gray-200">
+              <TabsTrigger value="received" className="text-gray-600 data-[state=active]:text-gray-900 data-[state=active]:bg-white">
+                Received Requests
+              </TabsTrigger>
+              <TabsTrigger value="sent" className="text-gray-600 data-[state=active]:text-gray-900 data-[state=active]:bg-white">
+                Sent Requests
+              </TabsTrigger>
+              <TabsTrigger value="stats" className="text-gray-600 data-[state=active]:text-gray-900 data-[state=active]:bg-white">
+                Statistics
+              </TabsTrigger>
+            </TabsList>
 
-        {/* Tab Content */}
-        {!loading && (
-          <div>
-            {activeTab === 'received' && (
-              <div>
-                <div className="mb-6">
-                  <h2 className="text-2xl font-bold text-gray-900 mb-2">Received Requests</h2>
-                  <p className="text-gray-600">Swap requests that others have sent to you.</p>
-                </div>
-                {receivedRequests.length === 0 ? (
-                  <Card>
-                    <CardContent className="text-center py-12">
-                      <p className="text-gray-500">You haven't received any swap requests yet.</p>
-                    </CardContent>
-                  </Card>
-                ) : (
-                  <div>
-                    {receivedRequests.map((request) => renderRequestCard(request, true))}
+            <div className="p-6">
+              {/* Loading State */}
+              {loading && (
+                <div className="text-center py-12">
+                  <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full animate-spin mb-4">
+                    <div className="w-3 h-3 bg-white rounded-full"></div>
                   </div>
-                )}
-              </div>
-            )}
-
-            {activeTab === 'sent' && (
-              <div>
-                <div className="mb-6">
-                  <h2 className="text-2xl font-bold text-gray-900 mb-2">Sent Requests</h2>
-                  <p className="text-gray-600">Swap requests that you have sent to others.</p>
+                  <p className="text-gray-600">Loading swap requests...</p>
                 </div>
-                {sentRequests.length === 0 ? (
-                  <Card>
-                    <CardContent className="text-center py-12">
-                      <p className="text-gray-500">You haven't sent any swap requests yet.</p>
-                      <Button
-                        onClick={() => navigate('/dashboard')}
-                        className="mt-4 bg-blue-600 hover:bg-blue-700 text-white"
-                      >
-                        Browse Users
-                      </Button>
-                    </CardContent>
-                  </Card>
-                ) : (
-                  <div>
-                    {sentRequests.map((request) => renderRequestCard(request, false))}
-                  </div>
-                )}
-              </div>
-            )}
+              )}
 
-            {activeTab === 'stats' && (
-              <div>
-                <div className="mb-6">
-                  <h2 className="text-2xl font-bold text-gray-900 mb-2">Statistics</h2>
-                  <p className="text-gray-600">Your swap request activity overview.</p>
-                </div>
-                {renderStatsTab()}
-              </div>
-            )}
-          </div>
-        )}
+              {/* Tab Content */}
+              {!loading && (
+                <>
+                  <TabsContent value="received" className="space-y-4">
+                    <div className={`mb-8 transform transition-all duration-1000 ${animate ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+                      <h2 className="text-3xl font-bold text-gray-900 mb-2">Received Requests</h2>
+                      <p className="text-gray-600">Swap requests that others have sent to you.</p>
+                    </div>
+                    {receivedRequests.length === 0 ? (
+                      <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg">
+                        <CardContent className="text-center py-16">
+                          <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <Users className="h-8 w-8 text-gray-400" />
+                          </div>
+                          <h3 className="text-lg font-semibold text-gray-900 mb-2">No requests yet</h3>
+                          <p className="text-gray-500 mb-4">You haven't received any swap requests yet.</p>
+                        </CardContent>
+                      </Card>
+                    ) : (
+                      <div>
+                        {receivedRequests.map((request, index) => renderRequestCard(request, true, index))}
+                      </div>
+                    )}
+                  </TabsContent>
+
+                  <TabsContent value="sent" className="space-y-4">
+                    <div className={`mb-8 transform transition-all duration-1000 ${animate ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+                      <h2 className="text-3xl font-bold text-gray-900 mb-2">Sent Requests</h2>
+                      <p className="text-gray-600">Swap requests that you have sent to others.</p>
+                    </div>
+                    {sentRequests.length === 0 ? (
+                      <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg">
+                        <CardContent className="text-center py-16">
+                          <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <TrendingUp className="h-8 w-8 text-gray-400" />
+                          </div>
+                          <h3 className="text-lg font-semibold text-gray-900 mb-2">No requests sent</h3>
+                          <p className="text-gray-500 mb-4">You haven't sent any swap requests yet.</p>
+                          <Button
+                            onClick={() => navigate('/dashboard')}
+                            className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-xl px-6 py-3 font-semibold transition-all duration-200 hover:scale-105 shadow-lg"
+                          >
+                            Browse Users
+                          </Button>
+                        </CardContent>
+                      </Card>
+                    ) : (
+                      <div>
+                        {sentRequests.map((request, index) => renderRequestCard(request, false, index))}
+                      </div>
+                    )}
+                  </TabsContent>
+
+                  <TabsContent value="stats" className="space-y-4">
+                    <div className={`mb-8 transform transition-all duration-1000 ${animate ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+                      <h2 className="text-3xl font-bold text-gray-900 mb-2">Statistics</h2>
+                      <p className="text-gray-600">Your swap request activity overview.</p>
+                    </div>
+                    {renderStatsTab()}
+                  </TabsContent>
+                </>
+              )}
+            </div>
+          </Tabs>
+        </div>
       </div>
 
       {/* Response Modal */}
       {showResponseModal && selectedRequest && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg max-w-md w-full mx-4 p-6">
-            <h3 className="text-lg font-semibold mb-4">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl max-w-md w-full mx-4 p-6 shadow-2xl transform transition-all duration-300 scale-100">
+            <h3 className="text-xl font-bold text-gray-900 mb-4">
               {responseAction === 'accept' ? 'Accept' : 'Reject'} Swap Request
             </h3>
-            <p className="text-gray-600 mb-4">
+            <p className="text-gray-600 mb-6">
               Are you sure you want to {responseAction} this swap request from {selectedRequest.requester.name}?
             </p>
-            <div className="mb-4">
+            <div className="mb-6">
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Message (Optional)
               </label>
@@ -472,7 +571,7 @@ function SwapRequestManager({ initialTab = 'received' }: SwapRequestManagerProps
                 value={responseMessage}
                 onChange={(e) => setResponseMessage(e.target.value)}
                 placeholder={`Add a message to explain your ${responseAction === 'accept' ? 'acceptance' : 'rejection'}...`}
-                className="w-full"
+                className="w-full bg-white/80 border border-gray-200 rounded-xl"
               />
             </div>
             <div className="flex justify-end space-x-3">
@@ -483,15 +582,17 @@ function SwapRequestManager({ initialTab = 'received' }: SwapRequestManagerProps
                   setResponseMessage('');
                 }}
                 variant="outline"
+                className="border-2 border-gray-200 hover:border-gray-300 rounded-xl px-6 py-2 font-semibold transition-all duration-200 hover:scale-105"
               >
                 Cancel
               </Button>
               <Button
                 onClick={confirmResponse}
-                className={responseAction === 'accept' 
-                  ? 'bg-green-600 hover:bg-green-700 text-white' 
-                  : 'bg-red-600 hover:bg-red-700 text-white'
-                }
+                className={`rounded-xl px-6 py-2 font-semibold transition-all duration-200 hover:scale-105 shadow-lg ${
+                  responseAction === 'accept' 
+                    ? 'bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white' 
+                    : 'bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white'
+                }`}
               >
                 {responseAction === 'accept' ? 'Accept' : 'Reject'}
               </Button>

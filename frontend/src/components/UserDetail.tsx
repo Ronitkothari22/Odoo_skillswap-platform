@@ -4,15 +4,30 @@ import { Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { config } from '@/config/config';
 
 interface User {
   id: string;
   name: string;
-  avatar: string;
-  skillsOffered: string[];
-  skillsWanted: string[];
-  availability: string;
-  rating?: number;
+  avatar_url?: string;
+  location?: string;
+  skills: Array<{
+    id: string;
+    name: string;
+    proficiency: number;
+  }>;
+  desiredSkills: Array<{
+    id: string;
+    name: string;
+    priority: number;
+  }>;
+  availability: Array<{
+    id: string;
+    weekday: number;
+    start_time: string;
+    end_time: string;
+  }>;
+  rating_avg: number;
 }
 
 function UserDetail() {
@@ -22,26 +37,34 @@ function UserDetail() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Mock API call to get user details
-    console.log("Loading user with ID:", userId);
+    const loadUser = async () => {
+      if (!userId) return;
+      
+      try {
+        setLoading(true);
+        console.log("Loading user with ID:", userId);
+        
+        const response = await fetch(`${config.API_BASE_URL}/api/users/${userId}`, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+          }
+        });
+        
+        if (!response.ok) {
+          throw new Error(`Failed to load user: ${response.status}`);
+        }
+        
+        const userData = await response.json();
+        console.log("User data loaded:", userData);
+        setUser(userData.user);
+      } catch (error) {
+        console.error('Error loading user:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
     
-    // Simulate API call with setTimeout
-    const timer = setTimeout(() => {
-      const mockUser: User = {
-        id: userId || '1',
-        name: 'Marc Demo',
-        avatar: '',
-        skillsOffered: ['Web Design', 'UI/UX', 'JavaScript'],
-        skillsWanted: ['Marketing', 'SEO', 'Content Writing'],
-        availability: 'Weekends',
-        rating: 4.5
-      };
-      console.log("User data loaded:", mockUser);
-      setUser(mockUser);
-      setLoading(false);
-    }, 500);
-    
-    return () => clearTimeout(timer);
+    loadUser();
   }, [userId]);
 
   const handleHome = () => {
@@ -128,12 +151,12 @@ function UserDetail() {
                   <div>
                     <h3 className="text-xl font-semibold text-gray-900 mb-3">Skills Offered</h3>
                     <div className="flex flex-wrap gap-2">
-                      {user.skillsOffered.map((skill, index) => (
+                      {user.skills.map((skill) => (
                         <Badge 
-                          key={index} 
+                          key={skill.id} 
                           className="bg-green-100 text-green-800 rounded-full px-3 py-1 text-sm"
                         >
-                          {skill}
+                          {skill.name} ({skill.proficiency}/5)
                         </Badge>
                       ))}
                     </div>
@@ -142,12 +165,12 @@ function UserDetail() {
                   <div>
                     <h3 className="text-xl font-semibold text-gray-900 mb-3">Skills Wanted</h3>
                     <div className="flex flex-wrap gap-2">
-                      {user.skillsWanted.map((skill, index) => (
+                      {user.desiredSkills.map((skill) => (
                         <Badge 
-                          key={index} 
+                          key={skill.id} 
                           className="bg-blue-100 text-blue-800 rounded-full px-3 py-1 text-sm"
                         >
-                          {skill}
+                          {skill.name} (Priority: {skill.priority}/5)
                         </Badge>
                       ))}
                     </div>
@@ -160,13 +183,18 @@ function UserDetail() {
                         {[...Array(5)].map((_, i) => (
                           <Star 
                             key={i} 
-                            className={`h-5 w-5 ${i < Math.floor(user.rating || 0) ? 'fill-yellow-400 text-yellow-400' : 'fill-gray-200 text-gray-200'}`} 
+                            className={`h-5 w-5 ${i < Math.floor(user.rating_avg || 0) ? 'fill-yellow-400 text-yellow-400' : 'fill-gray-200 text-gray-200'}`} 
                           />
                         ))}
                       </div>
-                      <span className="text-lg font-medium text-gray-900">{user.rating?.toFixed(1)}/5</span>
+                      <span className="text-lg font-medium text-gray-900">{user.rating_avg?.toFixed(1)}/5</span>
                     </div>
-                    <p className="text-gray-600 mt-2">Availability: {user.availability}</p>
+                    {user.location && (
+                      <p className="text-gray-600 mt-2">Location: {user.location}</p>
+                    )}
+                    <p className="text-gray-600 mt-2">
+                      Availability: {user.availability.length > 0 ? `${user.availability.length} slots available` : 'No availability set'}
+                    </p>
                   </div>
                 </div>
               </div>

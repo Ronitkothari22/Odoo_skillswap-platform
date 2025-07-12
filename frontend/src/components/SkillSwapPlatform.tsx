@@ -31,8 +31,8 @@ function SkillSwapPlatform() {
       setError('');
       
       const [usersResponse, statsResponse] = await Promise.all([
-        discoveryService.getAllUsers({ page: 1, limit: 20 }),
-        discoveryService.getPlatformStats()
+        discoveryService.getAllUsersPublic({ page: 1, limit: 20 }),
+        discoveryService.getPlatformStatsPublic()
       ]);
 
       setUsers(usersResponse.data);
@@ -48,7 +48,7 @@ function SkillSwapPlatform() {
   const handleSearch = async () => {
     try {
       setLoading(true);
-      const response = await discoveryService.searchUsers({
+      const response = await discoveryService.searchUsersPublic({
         skills: searchTerm,
         location: locationFilter === 'all' ? undefined : locationFilter,
         page: 1,

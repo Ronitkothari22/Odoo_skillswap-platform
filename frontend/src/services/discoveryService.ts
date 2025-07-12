@@ -107,6 +107,27 @@ export interface PaginatedResponse<T> {
 class DiscoveryService {
   private baseUrl = config.API_BASE_URL;
 
+  // Helper method to make public requests (no authentication)
+  private async makePublicRequest<T>(
+    endpoint: string,
+    options: RequestInit = {}
+  ): Promise<T> {
+    const response = await fetch(`${this.baseUrl}${endpoint}`, {
+      ...options,
+      headers: {
+        'Content-Type': 'application/json',
+        ...options.headers,
+      },
+    });
+
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({ message: 'Network error' }));
+      throw new Error(error.message || `HTTP error! status: ${response.status}`);
+    }
+
+    return response.json();
+  }
+
   // Helper method to make authenticated requests
   private async makeAuthenticatedRequest<T>(
     endpoint: string,
@@ -135,7 +156,59 @@ class DiscoveryService {
     return response.json();
   }
 
-  // Discovery API methods
+  // Public Discovery API methods (no authentication required)
+  async searchUsersPublic(params: {
+    skills?: string;
+    location?: string;
+    page?: number;
+    limit?: number;
+  }): Promise<PaginatedResponse<DiscoveryUser[]>> {
+    const searchParams = new URLSearchParams();
+    
+    if (params.skills) searchParams.append('skills', params.skills);
+    if (params.location) searchParams.append('location', params.location);
+    if (params.page) searchParams.append('page', params.page.toString());
+    if (params.limit) searchParams.append('limit', params.limit.toString());
+
+    const response = await this.makePublicRequest<any>(
+      `/api/public/discovery/search?${searchParams.toString()}`
+    );
+
+    return {
+      success: response.success,
+      data: response.users,
+      pagination: response.pagination,
+      message: response.message
+    };
+  }
+
+  async getAllUsersPublic(params: {
+    page?: number;
+    limit?: number;
+  } = {}): Promise<PaginatedResponse<DiscoveryUser[]>> {
+    const searchParams = new URLSearchParams();
+    
+    if (params.page) searchParams.append('page', params.page.toString());
+    if (params.limit) searchParams.append('limit', params.limit.toString());
+
+    const response = await this.makePublicRequest<any>(
+      `/api/public/discovery/users?${searchParams.toString()}`
+    );
+
+    return {
+      success: response.success,
+      data: response.users,
+      pagination: response.pagination,
+      message: response.message
+    };
+  }
+
+  async getPlatformStatsPublic(): Promise<PlatformStats> {
+    const response = await this.makePublicRequest<any>('/api/public/discovery/stats');
+    return response.stats;
+  }
+
+  // Authenticated Discovery API methods (require authentication)
   async searchUsers(params: {
     skills?: string;
     location?: string;
@@ -192,7 +265,7 @@ class DiscoveryService {
     return response.stats;
   }
 
-  // Matching API methods
+  // Matching API methods (require authentication)
   async getPersonalizedMatches(params: {
     minCompatibility?: number;
     page?: number;
