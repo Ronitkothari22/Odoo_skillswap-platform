@@ -12,10 +12,17 @@ function OAuthCallback() {
   useEffect(() => {
     const handleOAuthCallback = async () => {
       try {
+        console.log('OAuth callback started');
         // Get the authorization code from URL parameters
         const urlParams = new URLSearchParams(location.search);
         const code = urlParams.get('code');
         const error = urlParams.get('error');
+        
+        console.log('Code from URL:', code ? 'Present (length: ' + code.length + ')' : 'Missing');
+        console.log('Error from URL:', error);
+        
+        // More detailed logging
+        console.log('Full URL search params:', location.search);
 
         if (error) {
           setStatus('error');
@@ -30,18 +37,25 @@ function OAuthCallback() {
         }
 
         // Exchange the code for session tokens
+        console.log('Calling handleOAuthCallback with code');
         const response = await authService.handleOAuthCallback(code);
+        console.log('OAuth callback response:', response);
 
         if (response.success) {
           // Store user profile information
           if (response.user) {
-            localStorage.setItem('user', JSON.stringify({
+            const userData = {
               id: response.user.id,
               email: response.user.email,
               name: response.user.user_metadata?.name,
               avatar_url: response.user.user_metadata?.avatar_url,
               authType: 'google'
-            }));
+            };
+            console.log('Storing user data:', userData);
+            localStorage.setItem('user', JSON.stringify(userData));
+            
+            // Make sure tokens are stored
+            console.log('Access token present:', !!localStorage.getItem('access_token'));
           }
 
           setStatus('success');
