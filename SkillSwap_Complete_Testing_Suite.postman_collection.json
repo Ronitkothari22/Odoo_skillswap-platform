@@ -1,0 +1,1440 @@
+{
+  "info": {
+    "name": "SkillSwap Platform - Complete Testing Suite",
+    "description": "Comprehensive testing suite for the SkillSwap Platform including authentication, profile management, skill discovery, and swap request workflows.\n\n## Prerequisites\n1. Backend server running on localhost:8080\n2. Database migrations applied (message and updated_at fields in swap_requests table)\n3. Skills table populated with sample data\n\n## Test Flow\n1. **Setup & Authentication** - Create test users and authenticate\n2. **Profile Setup** - Set up user profiles with skills\n3. **Skill Discovery** - Test skill discovery and search features\n4. **Swap Request Workflow** - Complete CRUD operations for swap requests\n5. **Error Handling** - Test various error scenarios\n6. **Cleanup** - Clean up test data\n\n## Notes\n- Run requests in sequence for best results\n- Each folder can be run independently after authentication\n- Collection variables are automatically populated during execution",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": "2.1.0"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string",
+      "description": "Base URL for the SkillSwap Platform API"
+    },
+    {
+      "key": "authToken",
+      "value": "",
+      "type": "string",
+      "description": "Authentication token for API requests"
+    },
+    {
+      "key": "userId",
+      "value": "",
+      "type": "string",
+      "description": "Current authenticated user ID"
+    },
+    {
+      "key": "user1Id",
+      "value": "",
+      "type": "string",
+      "description": "Test user 1 ID"
+    },
+    {
+      "key": "user2Id",
+      "value": "",
+      "type": "string",
+      "description": "Test user 2 ID"
+    },
+    {
+      "key": "user1Token",
+      "value": "",
+      "type": "string",
+      "description": "Test user 1 authentication token"
+    },
+    {
+      "key": "user2Token",
+      "value": "",
+      "type": "string",
+      "description": "Test user 2 authentication token"
+    },
+    {
+      "key": "swapRequestId",
+      "value": "",
+      "type": "string",
+      "description": "Created swap request ID for testing"
+    },
+    {
+      "key": "reactSkillId",
+      "value": "",
+      "type": "string",
+      "description": "React skill ID from database"
+    },
+    {
+      "key": "pythonSkillId",
+      "value": "",
+      "type": "string",
+      "description": "Python skill ID from database"
+    },
+    {
+      "key": "jsSkillId",
+      "value": "",
+      "type": "string",
+      "description": "JavaScript skill ID from database"
+    },
+    {
+      "key": "nodeSkillId",
+      "value": "",
+      "type": "string",
+      "description": "Node.js skill ID from database"
+    }
+  ],
+  "item": [
+    {
+      "name": "🚀 Setup & Authentication",
+      "description": "Initial setup and user authentication for testing",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api",
+              "host": ["{{baseUrl}}"],
+              "path": ["api"]
+            },
+            "description": "Check if the API server is running and accessible"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('API Server is accessible', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('API returns welcome message', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.have.property('message');",
+                  "    pm.expect(response.message).to.include('Skill Swap Platform');",
+                  "});",
+                  "",
+                  "pm.test('API features are available', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.have.property('features');",
+                  "    pm.expect(response.features).to.have.property('swapRequests', 'Available');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get All Skills",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/profile/skills/all",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "profile", "skills", "all"]
+            },
+            "description": "Get all available skills from the database to use in tests"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response contains skills data', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.have.property('success', true);",
+                  "    pm.expect(response).to.have.property('data');",
+                  "    pm.expect(response.data).to.be.an('array');",
+                  "    pm.expect(response.data.length).to.be.greaterThan(0);",
+                  "});",
+                  "",
+                  "pm.test('Store skill IDs for testing', function () {",
+                  "    const response = pm.response.json();",
+                  "    if (response.success && response.data) {",
+                  "        // Find and store specific skill IDs",
+                  "        const skills = response.data;",
+                  "        ",
+                  "        const reactSkill = skills.find(skill => skill.name === 'React');",
+                  "        const pythonSkill = skills.find(skill => skill.name === 'Python');",
+                  "        const jsSkill = skills.find(skill => skill.name === 'JavaScript');",
+                  "        const nodeSkill = skills.find(skill => skill.name === 'Node.js');",
+                  "        ",
+                  "        if (reactSkill) pm.collectionVariables.set('reactSkillId', reactSkill.id);",
+                  "        if (pythonSkill) pm.collectionVariables.set('pythonSkillId', pythonSkill.id);",
+                  "        if (jsSkill) pm.collectionVariables.set('jsSkillId', jsSkill.id);",
+                  "        if (nodeSkill) pm.collectionVariables.set('nodeSkillId', nodeSkill.id);",
+                  "        ",
+                  "        console.log('Available skills:', skills.map(s => s.name));",
+                  "    }",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Sign Up User 1 (React Expert)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"react.expert@skillswap.com\",\n  \"password\": \"SecurePassword123!\",\n  \"name\": \"React Expert\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/signup",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "signup"]
+            },
+            "description": "Create first test user who is an expert in React"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('User 1 signup successful', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test('Response contains user data and token', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.have.property('success', true);",
+                  "    pm.expect(response).to.have.property('data');",
+                  "    pm.expect(response.data).to.have.property('user');",
+                  "    pm.expect(response.data.user).to.have.property('id');",
+                  "    pm.expect(response.data.user).to.have.property('email', 'react.expert@skillswap.com');",
+                  "});",
+                  "",
+                  "pm.test('Store user 1 credentials', function () {",
+                  "    const response = pm.response.json();",
+                  "    if (response.success && response.data) {",
+                  "        if (response.data.access_token) {",
+                  "            pm.collectionVariables.set('user1Token', response.data.access_token);",
+                  "        }",
+                  "        if (response.data.user && response.data.user.id) {",
+                  "            pm.collectionVariables.set('user1Id', response.data.user.id);",
+                  "        }",
+                  "    }",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Sign Up User 2 (Python Expert)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"python.expert@skillswap.com\",\n  \"password\": \"SecurePassword123!\",\n  \"name\": \"Python Expert\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/signup",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "signup"]
+            },
+            "description": "Create second test user who is an expert in Python"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('User 2 signup successful', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test('Response contains user data and token', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.have.property('success', true);",
+                  "    pm.expect(response).to.have.property('data');",
+                  "    pm.expect(response.data).to.have.property('user');",
+                  "    pm.expect(response.data.user).to.have.property('id');",
+                  "    pm.expect(response.data.user).to.have.property('email', 'python.expert@skillswap.com');",
+                  "});",
+                  "",
+                  "pm.test('Store user 2 credentials', function () {",
+                  "    const response = pm.response.json();",
+                  "    if (response.success && response.data) {",
+                  "        if (response.data.access_token) {",
+                  "            pm.collectionVariables.set('user2Token', response.data.access_token);",
+                  "        }",
+                  "        if (response.data.user && response.data.user.id) {",
+                  "            pm.collectionVariables.set('user2Id', response.data.user.id);",
+                  "        }",
+                  "    }",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Sign In User 1",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"react.expert@skillswap.com\",\n  \"password\": \"SecurePassword123!\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/signin",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "signin"]
+            },
+            "description": "Sign in User 1 and set as current user for testing"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('User 1 signin successful', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response contains authentication token', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.have.property('success', true);",
+                  "    pm.expect(response).to.have.property('data');",
+                  "    pm.expect(response.data).to.have.property('access_token');",
+                  "});",
+                  "",
+                  "pm.test('Set current user context', function () {",
+                  "    const response = pm.response.json();",
+                  "    if (response.success && response.data) {",
+                  "        pm.collectionVariables.set('authToken', response.data.access_token);",
+                  "        pm.collectionVariables.set('userId', response.data.user.id);",
+                  "    }",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "👤 Profile Setup",
+      "description": "Set up user profiles with skills and preferences",
+      "item": [
+        {
+          "name": "Add Skills to User 1 Profile",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user1Token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"skills\": [\n    {\n      \"skill_id\": \"{{reactSkillId}}\",\n      \"proficiency\": 5\n    },\n    {\n      \"skill_id\": \"{{jsSkillId}}\",\n      \"proficiency\": 4\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/profile/skills",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "profile", "skills"]
+            },
+            "description": "Add React and JavaScript skills to User 1's profile"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Skills added successfully', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response confirms skills addition', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.have.property('success', true);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Add Desired Skills to User 1",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user1Token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"desired_skills\": [\n    {\n      \"skill_id\": \"{{pythonSkillId}}\",\n      \"priority\": 5\n    },\n    {\n      \"skill_id\": \"{{nodeSkillId}}\",\n      \"priority\": 3\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/profile/desired-skills",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "profile", "desired-skills"]
+            },
+            "description": "Add Python and Node.js as desired skills for User 1"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Desired skills added successfully', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response confirms desired skills addition', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.have.property('success', true);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Add Skills to User 2 Profile",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user2Token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"skills\": [\n    {\n      \"skill_id\": \"{{pythonSkillId}}\",\n      \"proficiency\": 5\n    },\n    {\n      \"skill_id\": \"{{nodeSkillId}}\",\n      \"proficiency\": 4\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/profile/skills",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "profile", "skills"]
+            },
+            "description": "Add Python and Node.js skills to User 2's profile"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('User 2 skills added successfully', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response confirms skills addition', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.have.property('success', true);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Add Desired Skills to User 2",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user2Token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"desired_skills\": [\n    {\n      \"skill_id\": \"{{reactSkillId}}\",\n      \"priority\": 5\n    },\n    {\n      \"skill_id\": \"{{jsSkillId}}\",\n      \"priority\": 4\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/profile/desired-skills",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "profile", "desired-skills"]
+            },
+            "description": "Add React and JavaScript as desired skills for User 2"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('User 2 desired skills added successfully', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response confirms desired skills addition', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.have.property('success', true);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "🔄 Swap Request Workflow",
+      "description": "Complete CRUD operations for swap requests",
+      "item": [
+        {
+          "name": "Create Swap Request (User 1 → User 2)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user1Token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"responder_id\": \"{{user2Id}}\",\n  \"give_skill_id\": \"{{reactSkillId}}\",\n  \"take_skill_id\": \"{{pythonSkillId}}\",\n  \"message\": \"Hi! I'm a React expert looking to learn Python. I'd love to help you with React development in exchange for Python mentorship. Let's create something amazing together!\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/swaps",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "swaps"]
+            },
+            "description": "User 1 creates a swap request offering React skills for Python skills"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Swap request created successfully', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test('Response contains swap request data', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.have.property('success', true);",
+                  "    pm.expect(response).to.have.property('data');",
+                  "    pm.expect(response.data).to.have.property('id');",
+                  "    pm.expect(response.data).to.have.property('status', 'pending');",
+                  "    pm.expect(response.data).to.have.property('message');",
+                  "    ",
+                  "    // Store the swap request ID for later use",
+                  "    pm.collectionVariables.set('swapRequestId', response.data.id);",
+                  "});",
+                  "",
+                  "pm.test('Swap request has correct structure', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.data).to.have.property('requester_id', pm.collectionVariables.get('user1Id'));",
+                  "    pm.expect(response.data).to.have.property('responder_id', pm.collectionVariables.get('user2Id'));",
+                  "    pm.expect(response.data).to.have.property('give_skill_id', pm.collectionVariables.get('reactSkillId'));",
+                  "    pm.expect(response.data).to.have.property('take_skill_id', pm.collectionVariables.get('pythonSkillId'));",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get All Swap Requests for User 1",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user1Token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/swaps",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "swaps"]
+            },
+            "description": "Get all swap requests for User 1 (both sent and received)"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Swap requests retrieved successfully', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response contains swap requests list', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.have.property('success', true);",
+                  "    pm.expect(response).to.have.property('data');",
+                  "    pm.expect(response.data).to.have.property('swaps');",
+                  "    pm.expect(response.data.swaps).to.be.an('array');",
+                  "    pm.expect(response.data.swaps.length).to.be.greaterThan(0);",
+                  "});",
+                  "",
+                  "pm.test('Created swap request is in the list', function () {",
+                  "    const response = pm.response.json();",
+                  "    const swapId = pm.collectionVariables.get('swapRequestId');",
+                  "    const foundSwap = response.data.swaps.find(swap => swap.id === swapId);",
+                  "    pm.expect(foundSwap).to.not.be.undefined;",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Specific Swap Request by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user1Token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/swaps/{{swapRequestId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "swaps", "{{swapRequestId}}"]
+            },
+            "description": "Get details of a specific swap request by ID"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Swap request retrieved successfully', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response contains swap request details', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.have.property('success', true);",
+                  "    pm.expect(response).to.have.property('data');",
+                  "    pm.expect(response.data).to.have.property('id', pm.collectionVariables.get('swapRequestId'));",
+                  "    pm.expect(response.data).to.have.property('status', 'pending');",
+                  "});",
+                  "",
+                  "pm.test('Swap request has user and skill details', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.data).to.have.property('requester');",
+                  "    pm.expect(response.data).to.have.property('responder');",
+                  "    pm.expect(response.data).to.have.property('give_skill');",
+                  "    pm.expect(response.data).to.have.property('take_skill');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Sent Requests (User 1)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user1Token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/swaps/sent",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "swaps", "sent"]
+            },
+            "description": "Get swap requests sent by User 1"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Sent requests retrieved successfully', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response contains sent requests', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.have.property('success', true);",
+                  "    pm.expect(response).to.have.property('data');",
+                  "    pm.expect(response.data).to.have.property('swaps');",
+                  "    pm.expect(response.data.swaps).to.be.an('array');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Received Requests (User 2)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user2Token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/swaps/received",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "swaps", "received"]
+            },
+            "description": "Get swap requests received by User 2"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Received requests retrieved successfully', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response contains received requests', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.have.property('success', true);",
+                  "    pm.expect(response).to.have.property('data');",
+                  "    pm.expect(response.data).to.have.property('swaps');",
+                  "    pm.expect(response.data.swaps).to.be.an('array');",
+                  "});",
+                  "",
+                  "pm.test('Created swap request is in received list', function () {",
+                  "    const response = pm.response.json();",
+                  "    const swapId = pm.collectionVariables.get('swapRequestId');",
+                  "    const foundSwap = response.data.swaps.find(swap => swap.id === swapId);",
+                  "    pm.expect(foundSwap).to.not.be.undefined;",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Accept Swap Request (User 2)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user2Token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"Absolutely! I'd be happy to help you learn Python while learning React from you. This sounds like a perfect match!\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/swaps/{{swapRequestId}}/accept",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "swaps", "{{swapRequestId}}", "accept"]
+            },
+            "description": "User 2 accepts the swap request from User 1"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Swap request accepted successfully', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response confirms acceptance', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.have.property('success', true);",
+                  "    pm.expect(response).to.have.property('data');",
+                  "    pm.expect(response.data).to.have.property('status', 'accepted');",
+                  "});",
+                  "",
+                  "pm.test('Acceptance message is updated', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.data.message).to.include('perfect match');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Swap Request Statistics",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user1Token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/swaps/stats",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "swaps", "stats"]
+            },
+            "description": "Get statistics about swap requests for the current user"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Statistics retrieved successfully', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response contains statistics', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.have.property('success', true);",
+                  "    pm.expect(response).to.have.property('data');",
+                  "    pm.expect(response.data).to.have.property('totalRequests');",
+                  "    pm.expect(response.data).to.have.property('pendingRequests');",
+                  "    pm.expect(response.data).to.have.property('acceptedRequests');",
+                  "    pm.expect(response.data).to.have.property('cancelledRequests');",
+                  "});",
+                  "",
+                  "pm.test('Statistics show accepted request', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.data.acceptedRequests).to.be.greaterThan(0);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Filter Swap Requests by Status",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user1Token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/swaps?status=accepted&page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "swaps"],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "accepted"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "Filter swap requests by status (accepted)"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Filtered requests retrieved successfully', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response contains filtered results', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.have.property('success', true);",
+                  "    pm.expect(response).to.have.property('data');",
+                  "    pm.expect(response.data).to.have.property('swaps');",
+                  "});",
+                  "",
+                  "pm.test('All returned requests have accepted status', function () {",
+                  "    const response = pm.response.json();",
+                  "    response.data.swaps.forEach(swap => {",
+                  "        pm.expect(swap.status).to.equal('accepted');",
+                  "    });",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "🔍 Skill Discovery",
+      "description": "Test skill discovery and matching features",
+      "item": [
+        {
+          "name": "Search Users by Skill",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user1Token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/discovery/search?skills=Python&page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "discovery", "search"],
+              "query": [
+                {
+                  "key": "skills",
+                  "value": "Python"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "Search for users who have Python skills"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('User search successful', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response contains user results', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.have.property('success', true);",
+                  "    pm.expect(response).to.have.property('data');",
+                  "    pm.expect(response.data).to.have.property('users');",
+                  "    pm.expect(response.data.users).to.be.an('array');",
+                  "});",
+                  "",
+                  "pm.test('User 2 is in search results', function () {",
+                  "    const response = pm.response.json();",
+                  "    const user2Id = pm.collectionVariables.get('user2Id');",
+                  "    const foundUser = response.data.users.find(user => user.id === user2Id);",
+                  "    pm.expect(foundUser).to.not.be.undefined;",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Popular Skills",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user1Token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/discovery/skills/popular?limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "discovery", "skills", "popular"],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "Get list of popular skills with user counts"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Popular skills retrieved successfully', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response contains popular skills', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.have.property('success', true);",
+                  "    pm.expect(response).to.have.property('data');",
+                  "    pm.expect(response.data).to.be.an('array');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Matching Recommendations",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user1Token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/matching/recommendations?page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "matching", "recommendations"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "Get personalized matching recommendations for User 1"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Matching recommendations retrieved successfully', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response contains recommendations', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.have.property('success', true);",
+                  "    pm.expect(response).to.have.property('data');",
+                  "    pm.expect(response.data).to.have.property('recommendations');",
+                  "    pm.expect(response.data.recommendations).to.be.an('array');",
+                  "});",
+                  "",
+                  "pm.test('User 2 is in recommendations', function () {",
+                  "    const response = pm.response.json();",
+                  "    const user2Id = pm.collectionVariables.get('user2Id');",
+                  "    const foundUser = response.data.recommendations.find(rec => rec.user.id === user2Id);",
+                  "    pm.expect(foundUser).to.not.be.undefined;",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "❌ Error Handling",
+      "description": "Test various error scenarios and edge cases",
+      "item": [
+        {
+          "name": "Create Invalid Swap Request (Missing Fields)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user1Token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"responder_id\": \"{{user2Id}}\",\n  \"message\": \"Missing required skill IDs\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/swaps",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "swaps"]
+            },
+            "description": "Try to create a swap request with missing required fields"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Request fails with validation error', function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});",
+                  "",
+                  "pm.test('Response contains error message', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.have.property('success', false);",
+                  "    pm.expect(response).to.have.property('message');",
+                  "    pm.expect(response.message).to.include('Missing required fields');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Create Swap Request with Self",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user1Token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"responder_id\": \"{{user1Id}}\",\n  \"give_skill_id\": \"{{reactSkillId}}\",\n  \"take_skill_id\": \"{{pythonSkillId}}\",\n  \"message\": \"Trying to swap with myself\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/swaps",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "swaps"]
+            },
+            "description": "Try to create a swap request with the same user as responder"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Request fails with validation error', function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});",
+                  "",
+                  "pm.test('Response contains self-swap error', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.have.property('success', false);",
+                  "    pm.expect(response.message).to.include('Cannot create swap request with yourself');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Non-existent Swap Request",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user1Token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/swaps/00000000-0000-0000-0000-000000000000",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "swaps", "00000000-0000-0000-0000-000000000000"]
+            },
+            "description": "Try to get a swap request that doesn't exist"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Request fails with not found error', function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});",
+                  "",
+                  "pm.test('Response contains not found message', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.have.property('success', false);",
+                  "    pm.expect(response.message).to.include('not found');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Update Swap Request Without Auth",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"cancelled\",\n  \"message\": \"Trying to update without auth\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/swaps/{{swapRequestId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "swaps", "{{swapRequestId}}"]
+            },
+            "description": "Try to update a swap request without authentication"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Request fails with unauthorized error', function () {",
+                  "    pm.response.to.have.status(401);",
+                  "});",
+                  "",
+                  "pm.test('Response contains unauthorized message', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.have.property('success', false);",
+                  "    pm.expect(response.message).to.include('Unauthorized');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Accept Already Accepted Request",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user2Token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"Trying to accept again\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/swaps/{{swapRequestId}}/accept",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "swaps", "{{swapRequestId}}", "accept"]
+            },
+            "description": "Try to accept a swap request that's already been accepted"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Request fails with validation error', function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});",
+                  "",
+                  "pm.test('Response contains status error', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.have.property('success', false);",
+                  "    pm.expect(response.message).to.include('pending');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "🧹 Cleanup",
+      "description": "Clean up test data after testing",
+      "item": [
+        {
+          "name": "Create Test Swap for Deletion",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user1Token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"responder_id\": \"{{user2Id}}\",\n  \"give_skill_id\": \"{{jsSkillId}}\",\n  \"take_skill_id\": \"{{nodeSkillId}}\",\n  \"message\": \"Test swap for deletion\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/swaps",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "swaps"]
+            },
+            "description": "Create a test swap request to demonstrate deletion"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Test swap created successfully', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "const response = pm.response.json();",
+                  "if (response.success && response.data && response.data.id) {",
+                  "    pm.collectionVariables.set('deleteSwapId', response.data.id);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Delete Test Swap Request",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user1Token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/swaps/{{deleteSwapId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "swaps", "{{deleteSwapId}}"]
+            },
+            "description": "Delete the test swap request"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Swap request deleted successfully', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response confirms deletion', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.have.property('success', true);",
+                  "    pm.expect(response.message).to.include('deleted');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Verify Deletion",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user1Token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/swaps/{{deleteSwapId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "swaps", "{{deleteSwapId}}"]
+            },
+            "description": "Verify that the swap request has been deleted"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Deleted swap request not found', function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});",
+                  "",
+                  "pm.test('Response confirms swap not found', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.have.property('success', false);",
+                  "    pm.expect(response.message).to.include('not found');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Global pre-request script",
+          "console.log('Running request to:', pm.request.url);",
+          "",
+          "// Add timestamp to requests for debugging",
+          "pm.globals.set('requestTimestamp', new Date().toISOString());"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Global test script",
+          "pm.test('Response time is acceptable', function () {",
+          "    pm.expect(pm.response.responseTime).to.be.below(5000);",
+          "});",
+          "",
+          "// Log response for debugging",
+          "if (pm.response.code >= 400) {",
+          "    console.log('Error response:', pm.response.json());",
+          "}"
+        ]
+      }
+    }
+  ]
+} 

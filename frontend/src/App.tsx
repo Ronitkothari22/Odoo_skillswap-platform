@@ -7,6 +7,7 @@ import UserProfile from './components/UserProfile';
 import Dashboard from './components/Dashboard';
 import UserDetail from './components/UserDetail';
 import SwapRequestForm from './components/SwapRequestForm';
+import SwapRequestManager from './components/SwapRequestManager';
 import OAuthCallback from './components/OAuthCallback';
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/user/:userId" element={<UserDetail />} />
       <Route path="/swap-request/:userId" element={<SwapRequestForm />} />
+      <Route path="/swap-requests" element={<SwapRequestManager />} />
       <Route path="/auth/callback" element={<OAuthCallback />} />
     </Routes>
   );
