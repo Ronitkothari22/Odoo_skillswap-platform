@@ -3,6 +3,7 @@ import userRoutes from './user.routes';
 import authRoutes from './auth.routes';
 import profileRoutes from './profile.routes';
 import discoveryRoutes from './discovery.routes';
+import publicDiscoveryRoutes from './public-discovery.routes';
 import matchingRoutes from './matching.routes';
 import swapRoutes from './swap.routes';
 
@@ -16,6 +17,7 @@ router.get('/', (_req: Request, res: Response) => {
       authentication: 'Available',
       profiles: 'Available',
       skillDiscovery: 'Available',
+      publicSkillDiscovery: 'Available (No Auth Required)',
       intelligentMatching: 'Available',
       swapRequests: 'Available'
     }
@@ -26,6 +28,7 @@ router.use('/users', userRoutes);
 router.use('/auth', authRoutes);
 router.use('/profile', profileRoutes);
 router.use('/discovery', discoveryRoutes);
+router.use('/public/discovery', publicDiscoveryRoutes);
 router.use('/matching', matchingRoutes);
 router.use('/swaps', swapRoutes);
 

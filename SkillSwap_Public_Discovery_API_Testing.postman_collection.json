@@ -1,0 +1,737 @@
+{
+	"info": {
+		"_postman_id": "public-discovery-testing-collection",
+		"name": "SkillSwap - Public Discovery API Testing",
+		"description": "Test collection for public skill discovery endpoints that don't require authentication",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "skillswap-public-discovery"
+	},
+	"item": [
+		{
+			"name": "Public Discovery Stats",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/public/discovery/stats",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"public",
+						"discovery",
+						"stats"
+					]
+				},
+				"description": "Get general discovery statistics including total users, skills, and average ratings - no authentication required"
+			},
+			"response": []
+		},
+		{
+			"name": "Public Popular Skills",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/public/discovery/skills/popular?limit=10",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"public",
+						"discovery",
+						"skills",
+						"popular"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "10",
+							"description": "Number of popular skills to return"
+						}
+					]
+				},
+				"description": "Get the most popular skills with user counts - no authentication required"
+			},
+			"response": []
+		},
+		{
+			"name": "Public Popular Skills (More Results)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/public/discovery/skills/popular?limit=25",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"public",
+						"discovery",
+						"skills",
+						"popular"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "25",
+							"description": "Get more popular skills"
+						}
+					]
+				},
+				"description": "Get more popular skills with user counts - no authentication required"
+			},
+			"response": []
+		},
+		{
+			"name": "Public Discover Users (Basic)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/public/discovery/users",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"public",
+						"discovery",
+						"users"
+					]
+				},
+				"description": "Basic user discovery with default parameters - no authentication required"
+			},
+			"response": []
+		},
+		{
+			"name": "Public Discover Users (Paginated)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/public/discovery/users?page=1&limit=5&sortBy=rating",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"public",
+						"discovery",
+						"users"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1",
+							"description": "Page number"
+						},
+						{
+							"key": "limit",
+							"value": "5",
+							"description": "Number of users per page"
+						},
+						{
+							"key": "sortBy",
+							"value": "rating",
+							"description": "Sort by rating"
+						}
+					]
+				},
+				"description": "Paginated user discovery sorted by rating - no authentication required"
+			},
+			"response": []
+		},
+		{
+			"name": "Public Discover Users (Sort by Recent)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/public/discovery/users?page=1&limit=10&sortBy=recent",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"public",
+						"discovery",
+						"users"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1",
+							"description": "Page number"
+						},
+						{
+							"key": "limit",
+							"value": "10",
+							"description": "Number of users per page"
+						},
+						{
+							"key": "sortBy",
+							"value": "recent",
+							"description": "Sort by most recent users"
+						}
+					]
+				},
+				"description": "User discovery sorted by most recent - no authentication required"
+			},
+			"response": []
+		},
+		{
+			"name": "Public Discover Users (Sort by Skills)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/public/discovery/users?page=1&limit=10&sortBy=skills",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"public",
+						"discovery",
+						"users"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1",
+							"description": "Page number"
+						},
+						{
+							"key": "limit",
+							"value": "10",
+							"description": "Number of users per page"
+						},
+						{
+							"key": "sortBy",
+							"value": "skills",
+							"description": "Sort by number of skills"
+						}
+					]
+				},
+				"description": "User discovery sorted by number of skills - no authentication required"
+			},
+			"response": []
+		},
+		{
+			"name": "Public Search Users (Basic)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/public/discovery/search",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"public",
+						"discovery",
+						"search"
+					]
+				},
+				"description": "Basic user search with no filters - no authentication required"
+			},
+			"response": []
+		},
+		{
+			"name": "Public Search Users (by Skills)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/public/discovery/search?skills=JavaScript,Python&page=1&limit=10",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"public",
+						"discovery",
+						"search"
+					],
+					"query": [
+						{
+							"key": "skills",
+							"value": "JavaScript,Python",
+							"description": "Search for users with JavaScript or Python skills"
+						},
+						{
+							"key": "page",
+							"value": "1",
+							"description": "Page number"
+						},
+						{
+							"key": "limit",
+							"value": "10",
+							"description": "Number of results per page"
+						}
+					]
+				},
+				"description": "Search users by specific skills - no authentication required"
+			},
+			"response": []
+		},
+		{
+			"name": "Public Search Users (by Location)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/public/discovery/search?location=New York&page=1&limit=10",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"public",
+						"discovery",
+						"search"
+					],
+					"query": [
+						{
+							"key": "location",
+							"value": "New York",
+							"description": "Search for users in New York"
+						},
+						{
+							"key": "page",
+							"value": "1",
+							"description": "Page number"
+						},
+						{
+							"key": "limit",
+							"value": "10",
+							"description": "Number of results per page"
+						}
+					]
+				},
+				"description": "Search users by location - no authentication required"
+			},
+			"response": []
+		},
+		{
+			"name": "Public Search Users (by Rating)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/public/discovery/search?minRating=4.0&page=1&limit=10&sortBy=rating",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"public",
+						"discovery",
+						"search"
+					],
+					"query": [
+						{
+							"key": "minRating",
+							"value": "4.0",
+							"description": "Minimum rating of 4.0"
+						},
+						{
+							"key": "page",
+							"value": "1",
+							"description": "Page number"
+						},
+						{
+							"key": "limit",
+							"value": "10",
+							"description": "Number of results per page"
+						},
+						{
+							"key": "sortBy",
+							"value": "rating",
+							"description": "Sort by rating"
+						}
+					]
+				},
+				"description": "Search users with minimum rating - no authentication required"
+			},
+			"response": []
+		},
+		{
+			"name": "Public Search Users (Combined Filters)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/public/discovery/search?skills=React,Node.js&location=San Francisco&minRating=3.5&page=1&limit=5&sortBy=rating",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"public",
+						"discovery",
+						"search"
+					],
+					"query": [
+						{
+							"key": "skills",
+							"value": "React,Node.js",
+							"description": "Search for React or Node.js skills"
+						},
+						{
+							"key": "location",
+							"value": "San Francisco",
+							"description": "Location filter"
+						},
+						{
+							"key": "minRating",
+							"value": "3.5",
+							"description": "Minimum rating of 3.5"
+						},
+						{
+							"key": "page",
+							"value": "1",
+							"description": "Page number"
+						},
+						{
+							"key": "limit",
+							"value": "5",
+							"description": "Number of results per page"
+						},
+						{
+							"key": "sortBy",
+							"value": "rating",
+							"description": "Sort by rating"
+						}
+					]
+				},
+				"description": "Search users with multiple filters combined - no authentication required"
+			},
+			"response": []
+		},
+		{
+			"name": "Public Search Users (Proficiency Filter)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/public/discovery/search?proficiencyLevel={\"min\":3,\"max\":5}&page=1&limit=10",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"public",
+						"discovery",
+						"search"
+					],
+					"query": [
+						{
+							"key": "proficiencyLevel",
+							"value": "{\"min\":3,\"max\":5}",
+							"description": "Filter by proficiency level (3-5)"
+						},
+						{
+							"key": "page",
+							"value": "1",
+							"description": "Page number"
+						},
+						{
+							"key": "limit",
+							"value": "10",
+							"description": "Number of results per page"
+						}
+					]
+				},
+				"description": "Search users by proficiency level range - no authentication required"
+			},
+			"response": []
+		},
+		{
+			"name": "Public Get Users by Skill (JavaScript)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/public/discovery/skills/JavaScript/users",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"public",
+						"discovery",
+						"skills",
+						"JavaScript",
+						"users"
+					]
+				},
+				"description": "Get users who have JavaScript skills - no authentication required"
+			},
+			"response": []
+		},
+		{
+			"name": "Public Get Users by Skill (Python)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/public/discovery/skills/Python/users?page=1&limit=10&minProficiency=3",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"public",
+						"discovery",
+						"skills",
+						"Python",
+						"users"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1",
+							"description": "Page number"
+						},
+						{
+							"key": "limit",
+							"value": "10",
+							"description": "Number of results per page"
+						},
+						{
+							"key": "minProficiency",
+							"value": "3",
+							"description": "Minimum proficiency level of 3"
+						}
+					]
+				},
+				"description": "Get users with Python skills and minimum proficiency - no authentication required"
+			},
+			"response": []
+		},
+		{
+			"name": "Public Get Users by Skill (React)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/public/discovery/skills/React/users?page=1&limit=5&minProficiency=4",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"public",
+						"discovery",
+						"skills",
+						"React",
+						"users"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1",
+							"description": "Page number"
+						},
+						{
+							"key": "limit",
+							"value": "5",
+							"description": "Number of results per page"
+						},
+						{
+							"key": "minProficiency",
+							"value": "4",
+							"description": "Minimum proficiency level of 4"
+						}
+					]
+				},
+				"description": "Get users with React skills and high proficiency - no authentication required"
+			},
+			"response": []
+		},
+		{
+			"name": "Public Get Users by Skill (Node.js)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/public/discovery/skills/Node.js/users?page=1&limit=15&minProficiency=2",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"public",
+						"discovery",
+						"skills",
+						"Node.js",
+						"users"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1",
+							"description": "Page number"
+						},
+						{
+							"key": "limit",
+							"value": "15",
+							"description": "Number of results per page"
+						},
+						{
+							"key": "minProficiency",
+							"value": "2",
+							"description": "Minimum proficiency level of 2"
+						}
+					]
+				},
+				"description": "Get users with Node.js skills and basic proficiency - no authentication required"
+			},
+			"response": []
+		},
+		{
+			"name": "Public Get Users by Skill (Design)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/public/discovery/skills/Design/users?page=1&limit=10",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"public",
+						"discovery",
+						"skills",
+						"Design",
+						"users"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1",
+							"description": "Page number"
+						},
+						{
+							"key": "limit",
+							"value": "10",
+							"description": "Number of results per page"
+						}
+					]
+				},
+				"description": "Get users with Design skills - no authentication required"
+			},
+			"response": []
+		},
+		{
+			"name": "Public Search Users (Availability Filter)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/public/discovery/search?availability={\"weekdays\":[1,2,3,4,5]}&page=1&limit=10",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"public",
+						"discovery",
+						"search"
+					],
+					"query": [
+						{
+							"key": "availability",
+							"value": "{\"weekdays\":[1,2,3,4,5]}",
+							"description": "Filter by weekday availability (Monday-Friday)"
+						},
+						{
+							"key": "page",
+							"value": "1",
+							"description": "Page number"
+						},
+						{
+							"key": "limit",
+							"value": "10",
+							"description": "Number of results per page"
+						}
+					]
+				},
+				"description": "Search users by availability (weekdays) - no authentication required"
+			},
+			"response": []
+		},
+		{
+			"name": "Public Search Users (Time Range Filter)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/public/discovery/search?availability={\"timeRange\":{\"start\":\"09:00\",\"end\":\"17:00\"}}&page=1&limit=10",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"public",
+						"discovery",
+						"search"
+					],
+					"query": [
+						{
+							"key": "availability",
+							"value": "{\"timeRange\":{\"start\":\"09:00\",\"end\":\"17:00\"}}",
+							"description": "Filter by time range (9 AM - 5 PM)"
+						},
+						{
+							"key": "page",
+							"value": "1",
+							"description": "Page number"
+						},
+						{
+							"key": "limit",
+							"value": "10",
+							"description": "Number of results per page"
+						}
+					]
+				},
+				"description": "Search users by time range availability - no authentication required"
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:3000",
+			"type": "string"
+		}
+	]
+} 

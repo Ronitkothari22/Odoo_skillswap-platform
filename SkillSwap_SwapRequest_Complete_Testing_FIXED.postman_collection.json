@@ -1,0 +1,934 @@
+{
+  "info": {
+    "name": "SkillSwap Platform - Swap Request Complete Testing (FIXED)",
+    "description": "Complete testing suite for SkillSwap Platform swap request workflow with fresh authentication tokens and RLS fixes",
+    "version": "1.0.0",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    },
+    {
+      "key": "alexToken",
+      "value": "eyJhbGciOiJIUzI1NiIsImtpZCI6InRaZWlSTG9jMnlGN2lKVGIiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2p0amVnc2ljZmVxY3NmeXNibWR1LnN1cGFiYXNlLmNvL2F1dGgvdjEiLCJzdWIiOiIxNjM2M2YyMi04NjRlLTQzZTUtODdkMi05NDMxNjg4ODY0Y2QiLCJhdWQiOiJhdXRoZW50aWNhdGVkIiwiZXhwIjoxNzUyMzE0ODI1LCJpYXQiOjE3NTIzMTEyMjUsImVtYWlsIjoicHl0aG9uX2V4cGVydEB0ZXN0LmNvbSIsInBob25lIjoiIiwiYXBwX21ldGFkYXRhIjp7InByb3ZpZGVyIjoiZW1haWwiLCJwcm92aWRlcnMiOlsiZW1haWwiXX0sInVzZXJfbWV0YWRhdGEiOnsiZW1haWwiOiJweXRob25fZXhwZXJ0QHRlc3QuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsIm5hbWUiOiJBbGV4IFB5dGhvbiBFeHBlcnQiLCJwaG9uZV92ZXJpZmllZCI6ZmFsc2UsInN1YiI6IjE2MzYzZjIyLTg2NGUtNDNlNS04N2QyLTk0MzE2ODg4NjRjZCJ9LCJyb2xlIjoiYXV0aGVudGljYXRlZCIsImFhbCI6ImFhbDEiLCJhbXIiOlt7Im1ldGhvZCI6InBhc3N3b3JkIiwidGltZXN0YW1wIjoxNzUyMzExMjI1fV0sInNlc3Npb25faWQiOiI0YzgxODI3OS0xMzdkLTQ1Y2YtYTNiNS05YjExNWU2NmI5MzYiLCJpc19hbm9ueW1vdXMiOmZhbHNlfQ.ZF6JBpLuQuScBCkiZMm791b12n1sBS5dBQpZ1OCoNhw",
+      "type": "string"
+    },
+    {
+      "key": "sarahToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "mikeToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "priyaToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "rahulToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "alexId",
+      "value": "16363f22-864e-43e5-87d2-9431688864cd",
+      "type": "string"
+    },
+    {
+      "key": "sarahId",
+      "value": "8c639232-c142-4331-b16e-67ecd0be6ee4",
+      "type": "string"
+    },
+    {
+      "key": "mikeId",
+      "value": "01e43f90-49f1-4c33-b0a8-f5ee3dcb8243",
+      "type": "string"
+    },
+    {
+      "key": "priyaId",
+      "value": "fcf1fd07-3c60-4163-9d0b-7abd47ec9320",
+      "type": "string"
+    },
+    {
+      "key": "rahulId",
+      "value": "8c639232-c142-4331-b16e-67ecd0be6ee4",
+      "type": "string"
+    },
+    {
+      "key": "pythonSkillId",
+      "value": "1d543f90-49f1-4c33-b0a8-f5ee3dcb8243",
+      "type": "string"
+    },
+    {
+      "key": "reactSkillId",
+      "value": "8c639232-c142-4331-b16e-67ecd0be6ee4",
+      "type": "string"
+    },
+    {
+      "key": "devopsSkillId",
+      "value": "fcf1fd07-3c60-4163-9d0b-7abd47ec9320",
+      "type": "string"
+    },
+    {
+      "key": "mlSkillId",
+      "value": "01e43f90-49f1-4c33-b0a8-f5ee3dcb8243",
+      "type": "string"
+    },
+    {
+      "key": "awsSkillId",
+      "value": "8c639232-c142-4331-b16e-67ecd0be6ee4",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "🔐 Authentication Setup",
+      "item": [
+        {
+          "name": "Login Alex (Python Expert)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"python_expert@test.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const response = pm.response.json();",
+                  "if (response.success && response.session) {",
+                  "    pm.collectionVariables.set('alexToken', response.session.access_token);",
+                  "    console.log('✅ Alex token updated successfully');",
+                  "} else {",
+                  "    console.log('❌ Alex login failed:', response.message);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login Sarah (React Developer)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"react_dev@test.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const response = pm.response.json();",
+                  "if (response.success && response.session) {",
+                  "    pm.collectionVariables.set('sarahToken', response.session.access_token);",
+                  "    console.log('✅ Sarah token updated successfully');",
+                  "} else {",
+                  "    console.log('❌ Sarah login failed:', response.message);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login Mike (Full Stack)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"fullstack@test.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const response = pm.response.json();",
+                  "if (response.success && response.session) {",
+                  "    pm.collectionVariables.set('mikeToken', response.session.access_token);",
+                  "    console.log('✅ Mike token updated successfully');",
+                  "} else {",
+                  "    console.log('❌ Mike login failed:', response.message);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login Dr. Priya (ML Expert)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"ml_specialist@test.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const response = pm.response.json();",
+                  "if (response.success && response.session) {",
+                  "    pm.collectionVariables.set('priyaToken', response.session.access_token);",
+                  "    console.log('✅ Priya token updated successfully');",
+                  "} else {",
+                  "    console.log('❌ Priya login failed:', response.message);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login Rahul (DevOps Engineer)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"devops_expert@test.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const response = pm.response.json();",
+                  "if (response.success && response.session) {",
+                  "    pm.collectionVariables.set('rahulToken', response.session.access_token);",
+                  "    console.log('✅ Rahul token updated successfully');",
+                  "} else {",
+                  "    console.log('❌ Rahul login failed:', response.message);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "📊 Get Skills & User Data",
+      "item": [
+        {
+          "name": "Get All Skills",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{alexToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/profile/skills",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "profile", "skills"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const response = pm.response.json();",
+                  "if (response.success && response.data) {",
+                  "    const skills = response.data;",
+                  "    // Find and set skill IDs",
+                  "    const python = skills.find(s => s.name.toLowerCase().includes('python'));",
+                  "    const react = skills.find(s => s.name.toLowerCase().includes('react'));",
+                  "    const devops = skills.find(s => s.name.toLowerCase().includes('devops'));",
+                  "    const ml = skills.find(s => s.name.toLowerCase().includes('machine learning'));",
+                  "    const aws = skills.find(s => s.name.toLowerCase().includes('aws'));",
+                  "    ",
+                  "    if (python) pm.collectionVariables.set('pythonSkillId', python.id);",
+                  "    if (react) pm.collectionVariables.set('reactSkillId', react.id);",
+                  "    if (devops) pm.collectionVariables.set('devopsSkillId', devops.id);",
+                  "    if (ml) pm.collectionVariables.set('mlSkillId', ml.id);",
+                  "    if (aws) pm.collectionVariables.set('awsSkillId', aws.id);",
+                  "    ",
+                  "    console.log('✅ Skills loaded successfully');",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get User1 Profile (Alex)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{alexToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/profile",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "profile"]
+            }
+          }
+        },
+        {
+          "name": "Get User2 Profile (Sarah)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{sarahToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/profile",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "profile"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "📝 Create Swap Requests",
+      "item": [
+        {
+          "name": "Alex → Sarah: Python for React",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{alexToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"responder_id\": \"{{sarahId}}\",\n  \"give_skill_id\": \"{{pythonSkillId}}\",\n  \"take_skill_id\": \"{{reactSkillId}}\",\n  \"message\": \"Hi Sarah! I'd love to learn React from you. I can teach you Python in return. Let's do a skill exchange!\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/swaps",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "swaps"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 201', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test('Response contains swap request data', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.have.property('success', true);",
+                  "    pm.expect(response).to.have.property('data');",
+                  "    ",
+                  "    if (response.data && response.data.id) {",
+                  "        pm.collectionVariables.set('alexSarahSwapId', response.data.id);",
+                  "    }",
+                  "});",
+                  "",
+                  "pm.test('Swap request has correct details', function () {",
+                  "    const response = pm.response.json();",
+                  "    const data = response.data;",
+                  "    pm.expect(data.status).to.equal('pending');",
+                  "    pm.expect(data.requester_id).to.equal(pm.collectionVariables.get('alexId'));",
+                  "    pm.expect(data.responder_id).to.equal(pm.collectionVariables.get('sarahId'));",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Sarah → Dr. Priya: React for ML",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{sarahToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"responder_id\": \"{{priyaId}}\",\n  \"give_skill_id\": \"{{reactSkillId}}\",\n  \"take_skill_id\": \"{{mlSkillId}}\",\n  \"message\": \"Hi Dr. Priya! I'm interested in learning Machine Learning. I can teach you React development in exchange. What do you think?\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/swaps",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "swaps"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 201', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test('Response contains swap request data', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.have.property('success', true);",
+                  "    pm.expect(response).to.have.property('data');",
+                  "    ",
+                  "    if (response.data && response.data.id) {",
+                  "        pm.collectionVariables.set('sarahPriyaSwapId', response.data.id);",
+                  "    }",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Mike → Rahul: Python for DevOps",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{mikeToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"responder_id\": \"{{rahulId}}\",\n  \"give_skill_id\": \"{{pythonSkillId}}\",\n  \"take_skill_id\": \"{{devopsSkillId}}\",\n  \"message\": \"Hey Rahul! I'm a full-stack developer with solid Python skills. I'd love to learn DevOps from you. Let's do a skill exchange!\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/swaps",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "swaps"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 201', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test('Response contains swap request data', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.have.property('success', true);",
+                  "    pm.expect(response).to.have.property('data');",
+                  "    ",
+                  "    if (response.data && response.data.id) {",
+                  "        pm.collectionVariables.set('mikeRahulSwapId', response.data.id);",
+                  "    }",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Dr. Priya → Alex: Data Science for Python",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{priyaToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"responder_id\": \"{{alexId}}\",\n  \"give_skill_id\": \"{{mlSkillId}}\",\n  \"take_skill_id\": \"{{pythonSkillId}}\",\n  \"message\": \"Hi Alex! I noticed you're a Python expert. I'd love to deepen my Python knowledge while teaching you Data Science and ML. Interested?\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/swaps",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "swaps"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 201', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test('Response contains swap request data', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.have.property('success', true);",
+                  "    pm.expect(response).to.have.property('data');",
+                  "    ",
+                  "    if (response.data && response.data.id) {",
+                  "        pm.collectionVariables.set('priyaAlexSwapId', response.data.id);",
+                  "    }",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Rahul → Sarah: AWS for React",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{rahulToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"responder_id\": \"{{sarahId}}\",\n  \"give_skill_id\": \"{{awsSkillId}}\",\n  \"take_skill_id\": \"{{reactSkillId}}\",\n  \"message\": \"Hi Sarah! I'm a DevOps engineer with AWS expertise. I'd love to learn React development from you. Can we do a skill exchange?\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/swaps",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "swaps"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 201', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test('Response contains swap request data', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.have.property('success', true);",
+                  "    pm.expect(response).to.have.property('data');",
+                  "    ",
+                  "    if (response.data && response.data.id) {",
+                  "        pm.collectionVariables.set('rahulSarahSwapId', response.data.id);",
+                  "    }",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "👀 View Swap Requests",
+      "item": [
+        {
+          "name": "Alex - Get All Swap Requests",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{alexToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/swaps",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "swaps"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response contains swap requests', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.have.property('success', true);",
+                  "    pm.expect(response).to.have.property('data');",
+                  "    pm.expect(response.data).to.have.property('swaps');",
+                  "    pm.expect(response.data.swaps).to.be.an('array');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Sarah - Get Received Swap Requests",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{sarahToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/swaps/received",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "swaps", "received"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response contains received swap requests', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.have.property('success', true);",
+                  "    pm.expect(response).to.have.property('data');",
+                  "    pm.expect(response.data).to.be.an('array');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "✅ Accept Swap Requests",
+      "item": [
+        {
+          "name": "Sarah accepts Alex's request",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{sarahToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/swaps/{{alexSarahSwapId}}/accept",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "swaps", "{{alexSarahSwapId}}", "accept"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Swap request accepted', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.have.property('success', true);",
+                  "    pm.expect(response.data.status).to.equal('accepted');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Rahul accepts Mike's request",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{rahulToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/swaps/{{mikeRahulSwapId}}/accept",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "swaps", "{{mikeRahulSwapId}}", "accept"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Swap request accepted', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.have.property('success', true);",
+                  "    pm.expect(response.data.status).to.equal('accepted');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "❌ Reject Swap Requests",
+      "item": [
+        {
+          "name": "Alex rejects Dr. Priya's request",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{alexToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/swaps/{{priyaAlexSwapId}}/reject",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "swaps", "{{priyaAlexSwapId}}", "reject"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Swap request rejected', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.have.property('success', true);",
+                  "    pm.expect(response.data.status).to.equal('cancelled');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "📊 Final Summary Report",
+      "item": [
+        {
+          "name": "Alex - Get Final Stats",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{alexToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/swaps/stats",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "swaps", "stats"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Stats contain expected data', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.have.property('success', true);",
+                  "    pm.expect(response.data).to.have.property('totalSent');",
+                  "    pm.expect(response.data).to.have.property('totalReceived');",
+                  "    pm.expect(response.data).to.have.property('totalAccepted');",
+                  "    ",
+                  "    console.log('✅ Alex Final Stats:', JSON.stringify(response.data, null, 2));",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Sarah - Get Final Stats",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{sarahToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/swaps/stats",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "swaps", "stats"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Stats contain expected data', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.have.property('success', true);",
+                  "    pm.expect(response.data).to.have.property('totalSent');",
+                  "    pm.expect(response.data).to.have.property('totalReceived');",
+                  "    pm.expect(response.data).to.have.property('totalAccepted');",
+                  "    ",
+                  "    console.log('✅ Sarah Final Stats:', JSON.stringify(response.data, null, 2));",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+} 

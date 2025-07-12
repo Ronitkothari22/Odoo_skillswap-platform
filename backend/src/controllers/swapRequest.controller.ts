@@ -128,7 +128,11 @@ export const getSwapRequestById = async (req: AuthRequest, res: Response) => {
       });
     }
 
-    const swap = await swapRequestService.getSwapRequestById(id);
+    // Extract the user token from Authorization header
+    const authHeader = req.headers['authorization'];
+    const userToken = authHeader ? authHeader.split(' ')[1] : undefined;
+    
+    const swap = await swapRequestService.getSwapRequestById(id, userToken);
     if (!swap) {
       return res.status(404).json({ 
         success: false, 
@@ -239,7 +243,11 @@ export const deleteSwapRequest = async (req: AuthRequest, res: Response) => {
       });
     }
 
-    const result = await swapRequestService.deleteSwapRequest(id, userId);
+    // Extract the user token from Authorization header
+    const authHeader = req.headers['authorization'];
+    const userToken = authHeader ? authHeader.split(' ')[1] : undefined;
+    
+    const result = await swapRequestService.deleteSwapRequest(id, userId, userToken);
 
     if (!result.success) {
       return res.status(400).json({ 

@@ -61,7 +61,7 @@ export class SwapRequestService {
       }
 
       // Get the full swap request with details
-      const fullSwap = await this.getSwapRequestById(swapRequest.id);
+      const fullSwap = await this.getSwapRequestById(swapRequest.id, userToken);
       if (!fullSwap) {
         return { success: false, error: 'Failed to retrieve created swap request' };
       }
@@ -84,7 +84,7 @@ export class SwapRequestService {
   ): Promise<{ success: boolean; swap?: SwapRequestWithDetails; error?: string }> {
     try {
       // Get the current swap request
-      const currentSwap = await this.getSwapRequestById(swapId);
+      const currentSwap = await this.getSwapRequestById(swapId, userToken);
       if (!currentSwap) {
         return { success: false, error: 'Swap request not found' };
       }
@@ -117,7 +117,7 @@ export class SwapRequestService {
       }
 
       // Get the full updated swap request
-      const fullSwap = await this.getSwapRequestById(swapId);
+      const fullSwap = await this.getSwapRequestById(swapId, userToken);
       if (!fullSwap) {
         return { success: false, error: 'Failed to retrieve updated swap request' };
       }
@@ -132,9 +132,11 @@ export class SwapRequestService {
   /**
    * Get swap request by ID with full details
    */
-  async getSwapRequestById(swapId: string): Promise<SwapRequestWithDetails | null> {
+  async getSwapRequestById(swapId: string, userToken?: string): Promise<SwapRequestWithDetails | null> {
     try {
-      const { data: swap, error } = await supabase
+      // Use user client if token provided to respect RLS, otherwise use service role
+      const client = userToken ? createUserClient(userToken) : supabase;
+      const { data: swap, error } = await client
         .from('swap_requests')
         .select(`
           *,
@@ -332,10 +334,10 @@ export class SwapRequestService {
   /**
    * Delete/withdraw a swap request
    */
-  async deleteSwapRequest(swapId: string, userId: string): Promise<{ success: boolean; error?: string }> {
+  async deleteSwapRequest(swapId: string, userId: string, userToken?: string): Promise<{ success: boolean; error?: string }> {
     try {
       // Check if the swap request exists and user is authorized
-      const swap = await this.getSwapRequestById(swapId);
+      const swap = await this.getSwapRequestById(swapId, userToken);
       if (!swap) {
         return { success: false, error: 'Swap request not found' };
       }
