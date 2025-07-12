@@ -12,7 +12,7 @@ A modern, full-stack skill exchange platform that connects users to teach and le
 - **Ronit Kothari** - ronitkothari22@gmail.com
 
 ### 🎬 Demo Video
-🔗 [Demo Video Link](https://drive.google.com/drive/folders/1e2cHtJG6Mhq1sFvWUb3NtpKhH37zGSIx?usp=sharing)
+🔗 [Demo Video Link](https://drive.google.com/drive/folders/1JdT7ihlIr3Drv87ECeEToDocGflxsgEu)
 
 ### 💻 Technologies Used
 - **Frontend**: React 19, TypeScript, Tailwind CSS, Vite
