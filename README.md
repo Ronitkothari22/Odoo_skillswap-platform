@@ -23,262 +23,187 @@ A modern, full-stack skill exchange platform that connects users to teach and le
 
 ---
 
-A modern, full-stack skill exchange platform that connects users to teach and learn skills from each other. Built with TypeScript, React, Node.js, and Supabase.
-
-## 🌟 Features
+## 🌟 Key Features
 
 ### 🔐 Authentication & Security
-- **Multi-provider Authentication**: Email/password and Google OAuth
-- **JWT-based Session Management**: Secure token-based authentication
-- **Row-Level Security**: Database-level access controls
-- **Password Recovery**: Secure password reset functionality
+- **Multi-Provider Authentication**: Seamless login with email/password or Google OAuth
+- **JWT-Based Sessions**: Secure token-based authentication with automatic refresh
+- **Row-Level Security**: Database-level access controls ensuring data privacy
+- **Password Recovery**: Secure password reset functionality via email
 
-### 👤 User Management
-- **Comprehensive Profiles**: Name, location, avatar, visibility settings
-- **Skill Portfolio**: Manage skills you can teach with proficiency levels (1-5)
+### 👤 User Profile Management
+- **Comprehensive Profiles**: Complete user information including name, location, avatar, and bio
+- **Skills Portfolio**: Manage skills you can teach with proficiency levels (1-5 stars)
 - **Learning Goals**: Track skills you want to learn with priority levels
-- **Availability Scheduling**: Set weekly availability slots
-- **Rating System**: Community-driven user ratings
+- **Availability Scheduling**: Set weekly availability slots for flexible scheduling
+- **Privacy Controls**: Manage profile visibility and contact preferences
 
-### 🎯 Intelligent Matching
-- **Smart Compatibility Analysis**: Multi-factor matching algorithm
-- **Skill-based Discovery**: Find users by specific skills
-- **Location-based Filtering**: Connect with nearby users
-- **Bidirectional Matching**: Find perfect skill exchanges
-- **Personalized Recommendations**: AI-powered skill suggestions
+### 🎯 Intelligent Matching System
+- **Smart Compatibility Analysis**: Advanced algorithm considering multiple factors
+- **Skill-Based Discovery**: Find users by specific skills with filtering options
+- **Location-Based Matching**: Connect with users in your area or remotely
+- **Bidirectional Matching**: Find perfect skill exchanges where both parties benefit
+- **Compatibility Scoring**: Percentage-based matching scores for better decisions
 
-### 📋 Swap Management
-- **Swap Requests**: Create and manage skill exchange requests
-- **Status Tracking**: Track pending, accepted, and cancelled swaps
-- **Messaging System**: Include messages with swap requests
-- **History Management**: View complete swap history
+### 📋 Swap Request Management
+- **Request Creation**: Create detailed swap requests with specific skills and messages
+- **Status Tracking**: Track pending, accepted, completed, and cancelled swaps
+- **Messaging System**: Built-in messaging for swap coordination
+- **History Management**: Complete history of all swap activities
+- **Notification System**: Real-time updates on swap status changes
 
-### ⭐ Feedback System
-- **Post-Swap Reviews**: Rate and review completed exchanges
-- **Comprehensive Analytics**: View feedback statistics and insights
-- **Community Trust**: Build reputation through quality exchanges
-- **Detailed Feedback**: Star ratings with optional comments
+### ⭐ Feedback & Rating System
+- **Post-Swap Reviews**: Rate and review completed skill exchanges
+- **Comprehensive Analytics**: View detailed feedback statistics and insights
+- **Community Trust Building**: Build reputation through quality exchanges
+- **Detailed Feedback**: 5-star ratings with optional written comments
+- **Rating Aggregation**: Automatic calculation of overall user ratings
 
-### 🔍 Discovery & Search
-- **Advanced Search**: Multi-criteria user discovery
-- **Popular Skills**: Trending skills on the platform
-- **Filtering Options**: By rating, location, availability, proficiency
-- **Sorting Options**: By relevance, rating, recent activity
+### 🔍 Advanced Discovery & Search
+- **Multi-Criteria Search**: Search by skills, location, rating, and availability
+- **Popular Skills Tracking**: See trending skills on the platform
+- **Advanced Filtering**: Filter by proficiency level, location radius, and user rating
+- **Sorting Options**: Sort results by relevance, rating, or recent activity
+- **Skill Suggestions**: Get personalized skill recommendations
 
-## 🛠️ Technology Stack
 
-### Backend
-- **Runtime**: Node.js 18+
-- **Framework**: Express.js
-- **Language**: TypeScript
-- **Database**: PostgreSQL (via Supabase)
-- **Authentication**: Supabase Auth + JWT
-- **ORM**: Supabase Client
-- **Security**: Helmet, CORS, Row-Level Security
-- **Logging**: Morgan
-
-### Frontend
-- **Framework**: React 19
-- **Language**: TypeScript
-- **Build Tool**: Vite
-- **Styling**: Tailwind CSS
-- **UI Components**: Radix UI
-- **Icons**: Lucide React
-- **Routing**: React Router DOM
-- **Forms**: React Hook Form + Zod
-- **HTTP Client**: Fetch API
-
-### Database
-- **Primary Database**: PostgreSQL (Supabase)
-- **Authentication**: Supabase Auth
-- **Real-time**: Supabase Realtime
-- **Storage**: Supabase Storage (for avatars)
-- **Migrations**: SQL-based migrations
-
-### Development & Deployment
-- **Package Manager**: pnpm
-- **Monorepo**: pnpm workspaces
-- **Development**: nodemon, ts-node
-- **Build**: TypeScript Compiler
-- **Testing**: Postman collections
-- **Environment**: dotenv
-
-## 🚀 Quick Start
-
-### Prerequisites
-- Node.js 18 or higher
-- pnpm (recommended) or npm
-- Supabase account
-- Google Cloud Console account (for OAuth)
-
-### 1. Clone the Repository
-```bash
-git clone https://github.com/yourusername/skillswap-platform.git
-cd skillswap-platform
-```
-
-### 2. Install Dependencies
-```bash
-# Install all dependencies (backend + frontend)
-pnpm install
-
-# Or install separately
-cd backend && npm install
-cd ../frontend && npm install
-```
-
-### 3. Environment Setup
-```bash
-# Copy environment template
-cd backend
-cp env.template .env
-```
-
-Edit `.env` with your Supabase credentials:
+### Environment Variables
+Edit `backend/.env` with your Supabase credentials:
 ```env
 PORT=5000
 NODE_ENV=development
 FRONTEND_URL=http://localhost:5173
-
-# Supabase Configuration
 SUPABASE_URL=https://your-project.supabase.co
 SUPABASE_ANON_KEY=your-anon-key
 SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 SUPABASE_JWT_SECRET=your-jwt-secret
 ```
 
-### 4. Database Setup
-```bash
-# Apply migrations via Supabase CLI
-supabase db push
+## 🛠️ Architecture & Tech Stack
 
-# Or manually run SQL files in Supabase Dashboard:
-# - backend/supabase/migrations/0001_init.sql
-# - backend/supabase/migrations/0002_auth_policies.sql
-# - backend/supabase/migrations/0003_swap_requests_fixes.sql
-# - backend/supabase/migrations/0004_sample_skills.sql
-# - backend/supabase/migrations/0005_fix_swap_rls.sql
-# - backend/supabase/migrations/0006_feedback_rating_trigger.sql
-```
+### Frontend Architecture
+- **React 19**: Modern React with latest features and hooks
+- **TypeScript**: Type-safe development with full IntelliSense
+- **Tailwind CSS**: Utility-first styling for rapid UI development
+- **Vite**: Lightning-fast build tool and development server
+- **Radix UI**: Accessible, unstyled UI components
+- **React Hook Form + Zod**: Form handling with validation
+- **React Router**: Client-side routing
 
-### 5. Google OAuth Setup (Optional)
-1. Go to [Google Cloud Console](https://console.cloud.google.com/)
-2. Create a project and enable Google+ API
-3. Create OAuth 2.0 credentials
-4. In Supabase Dashboard:
-   - Go to Authentication > Settings > Auth Providers
-   - Enable Google provider
-   - Add your Google Client ID and Secret
-   - Configure redirect URLs:
-     - `https://your-project.supabase.co/auth/v1/callback`
-     - `http://localhost:5173/auth/callback`
+### Backend Architecture
+- **Node.js + Express**: Robust server framework
+- **TypeScript**: Type-safe server-side development
+- **Supabase Client**: Database operations and real-time features
+- **JWT Authentication**: Secure token-based auth
+- **Middleware Stack**: CORS, Helmet, Morgan logging
+- **Error Handling**: Centralized error management
 
-### 6. Run the Application
-```bash
-# Start backend (from backend directory)
-cd backend
-npm run dev
-
-# Start frontend (from frontend directory)
-cd frontend
-npm run dev
-```
-
-The application will be available at:
-- **Frontend**: http://localhost:5173
-- **Backend API**: http://localhost:5000
+### Database Design
+- **PostgreSQL (Supabase)**: Robust relational database
+- **Row-Level Security**: Fine-grained access controls
+- **Real-time Subscriptions**: Live data updates
+- **Automatic Migrations**: Version-controlled schema changes
 
 ## 📊 Database Schema
 
 ### Core Tables
-- **users**: User profiles and settings
-- **skills**: Master skills catalog
-- **user_skills**: Skills users can teach (with proficiency)
-- **desired_skills**: Skills users want to learn (with priority)
-- **availability_slots**: Weekly availability schedules
-- **swap_requests**: Skill exchange requests
-- **feedback**: Post-swap reviews and ratings
-- **admin_logs**: Administrative action logs
+- **`users`**: User profiles, settings, and authentication data
+- **`skills`**: Master catalog of available skills
+- **`user_skills`**: Skills users can teach with proficiency levels
+- **`desired_skills`**: Skills users want to learn with priority
+- **`availability_slots`**: Weekly availability schedules
+- **`swap_requests`**: Skill exchange requests and status
+- **`feedback`**: Post-swap reviews and ratings
+- **`admin_logs`**: Administrative actions and system logs
 
 ### Key Relationships
-- Users can have multiple skills to teach and learn
-- Swap requests connect two users with specific skills
-- Feedback is linked to completed swaps
-- Availability slots support flexible scheduling
+- Users can teach multiple skills and want to learn multiple skills
+- Swap requests connect two users for specific skill exchanges
+- Feedback is linked to completed swaps for trust building
+- Availability slots enable flexible scheduling
 
-## 🔗 API Documentation
-
-### Authentication API
-- [AUTH_API_DOCS.md](./AUTH_API_DOCS.md) - Complete authentication endpoints
-
-### Core APIs
-- [PROFILE_MANAGEMENT_API.md](./PROFILE_MANAGEMENT_API.md) - User profile management
-- [SWAP_REQUEST_API_DOCUMENTATION.md](./SWAP_REQUEST_API_DOCUMENTATION.md) - Swap request system
-- [FEEDBACK_API_DOCUMENTATION.md](./FEEDBACK_API_DOCUMENTATION.md) - Feedback and ratings
-- [DISCOVERY_MATCHING_API_GUIDE.md](./DISCOVERY_MATCHING_API_GUIDE.md) - Discovery and matching
-- [PUBLIC_DISCOVERY_API_DOCUMENTATION.md](./PUBLIC_DISCOVERY_API_DOCUMENTATION.md) - Public discovery
-
-### API Base URLs
-- **Development**: `http://localhost:5000/api`
-- **Production**: `https://your-domain.com/api`
+## 🔗 API Endpoints
 
 ### Authentication
-All protected endpoints require JWT token:
-```
-Authorization: Bearer <your-jwt-token>
-```
+- `POST /api/auth/register` - User registration
+- `POST /api/auth/login` - User login
+- `POST /api/auth/google` - Google OAuth login
+- `POST /api/auth/logout` - User logout
+- `GET /api/auth/me` - Get current user info
+- `POST /api/auth/forgot-password` - Password reset
 
-## 🧪 Testing
+### User Management
+- `GET /api/users/profile` - Get user profile
+- `PUT /api/users/profile` - Update user profile
+- `POST /api/users/skills` - Add user skills
+- `GET /api/users/skills` - Get user skills
+- `DELETE /api/users/skills/:id` - Remove user skill
 
-### Postman Collections
-Import the provided Postman collections for comprehensive API testing:
-- `postman_collection.json` - Main API collection
-- `SkillSwap Platform - Test Data Creator.postman_collection.json` - Test data setup
-- `SkillSwap_Feedback_System_Testing.postman_collection.json` - Feedback system
-- `SkillSwap_Public_Discovery_API_Testing.postman_collection.json` - Discovery API
-- `SkillSwap_SwapRequest_Complete_Testing_FIXED.postman_collection.json` - Swap requests
+### Discovery & Matching
+- `GET /api/discovery/users` - Search users by skills
+- `GET /api/discovery/skills` - Get available skills
+- `GET /api/matching/suggestions` - Get personalized matches
+- `POST /api/matching/compatibility` - Calculate compatibility
 
-### Manual Testing
-```bash
-# Test authentication
-cd backend
-node test-auth.js
+### Swap Requests
+- `POST /api/swap-requests` - Create swap request
+- `GET /api/swap-requests` - Get user's swap requests
+- `PUT /api/swap-requests/:id` - Update swap request
+- `DELETE /api/swap-requests/:id` - Cancel swap request
 
-# Test API endpoints
-curl -X GET http://localhost:5000/api/auth/me \
-  -H "Authorization: Bearer <your-token>"
-```
+### Feedback System
+- `POST /api/feedback` - Submit feedback
+- `GET /api/feedback/user/:id` - Get user feedback
+- `GET /api/feedback/stats` - Get feedback statistics
+
+
+## 🎯 What Makes It Special
+
+### 🧠 Intelligent Matching Algorithm
+Our proprietary matching system considers:
+- **Skill Compatibility**: Matching skills you want to learn with skills others teach
+- **Proficiency Levels**: Ensuring appropriate skill level matches
+- **Location Preferences**: Connecting users based on location preferences
+- **Availability Overlap**: Finding users with compatible schedules
+- **Rating Compatibility**: Matching users with similar rating levels
+
+### 🔒 Enterprise-Grade Security
+- **Row-Level Security**: Database-level access controls
+- **JWT Token Management**: Secure authentication with automatic refresh
+- **Input Validation**: Comprehensive request validation and sanitization
+- **CORS Configuration**: Proper cross-origin request handling
+- **Rate Limiting**: API protection against abuse
+
+### 🚀 Real-Time Features
+- **Live Notifications**: Instant updates on swap requests and messages
+- **Real-Time Matching**: Dynamic compatibility updates
+- **Live Status Updates**: Real-time swap request status changes
+- **Instant Messaging**: Real-time communication between users
+
+### 📱 Mobile-First Design
+- **Responsive Layout**: Works seamlessly on all device sizes
+- **Touch-Friendly Interface**: Optimized for mobile interaction
+- **Progressive Web App**: App-like experience in the browser
+- **Offline Capability**: Basic functionality available offline
 
 ## 🚀 Deployment
 
-### Backend Deployment
-1. Build the TypeScript code:
-```bash
-cd backend
-npm run build
-```
-
-2. Deploy to your preferred platform:
-- **Vercel**: Use serverless functions
-- **Heroku**: Deploy with Procfile
-- **Railway**: Direct deployment
-- **AWS/GCP**: Use Docker containers
-
-### Frontend Deployment
-1. Build the React app:
+### Frontend Deployment (Vercel)
 ```bash
 cd frontend
-npm run build
+pnpm run build
+# Deploy to Vercel
 ```
 
-2. Deploy static files:
-- **Vercel**: Automatic deployment
-- **Netlify**: Drag & drop or Git integration
-- **AWS S3**: Static website hosting
-- **GitHub Pages**: For open source projects
+### Backend Deployment (Railway/Heroku)
+```bash
+cd backend
+pnpm run build
+# Deploy to your preferred platform
+```
 
-### Environment Variables
-Set these in your production environment:
+### Environment Setup
+Set production environment variables:
 ```env
 NODE_ENV=production
 PORT=8080
@@ -289,159 +214,28 @@ SUPABASE_SERVICE_ROLE_KEY=your-production-service-key
 SUPABASE_JWT_SECRET=your-production-jwt-secret
 ```
 
-## 🛣️ Development Workflow
+## 📈 Performance & Scalability
 
-### Code Structure
-```
-skillswap-platform/
-├── backend/                 # Node.js API server
-│   ├── src/
-│   │   ├── controllers/     # Route handlers
-│   │   ├── middleware/      # Express middleware
-│   │   ├── routes/         # API routes
-│   │   ├── services/       # Business logic
-│   │   └── types/          # TypeScript types
-│   ├── supabase/
-│   │   └── migrations/     # Database migrations
-│   └── scripts/            # Utility scripts
-├── frontend/               # React application
-│   ├── src/
-│   │   ├── components/     # React components
-│   │   ├── services/       # API services
-│   │   ├── lib/           # Utilities
-│   │   └── config/        # Configuration
-│   └── public/            # Static assets
-└── docs/                  # API documentation
-```
+### Frontend Optimization
+- **Code Splitting**: Lazy loading for optimal performance
+- **Image Optimization**: Responsive images with proper formats
+- **Caching Strategy**: Efficient client-side caching
+- **Bundle Analysis**: Optimized build sizes
 
-### Available Scripts
+### Backend Optimization
+- **Database Indexing**: Optimized queries with proper indexes
+- **Connection Pooling**: Efficient database connection management
+- **Caching Layer**: Redis caching for frequently accessed data
+- **API Rate Limiting**: Protection against abuse
 
-#### Backend
-```bash
-npm run dev        # Development server with hot reload
-npm run build      # Build TypeScript to JavaScript
-npm run start      # Start production server
-```
-
-#### Frontend
-```bash
-npm run dev        # Development server
-npm run build      # Build for production
-npm run preview    # Preview production build
-npm run lint       # Run ESLint
-```
-
-### Git Workflow
-1. Create feature branches from `main`
-2. Follow conventional commit format
-3. Submit pull requests for review
-4. Merge to `main` after approval
-
-## 🤝 Contributing
-
-We welcome contributions! Please follow these steps:
-
-1. **Fork the repository**
-2. **Create a feature branch**
-```bash
-git checkout -b feature/amazing-feature
-```
-
-3. **Make your changes**
-4. **Follow the code style**
-   - Use TypeScript for type safety
-   - Follow existing naming conventions
-   - Add JSDoc comments for functions
-   - Use Prettier for formatting
-
-5. **Test your changes**
-   - Run existing tests
-   - Add new tests for new features
-   - Test API endpoints with Postman
-
-6. **Commit your changes**
-```bash
-git commit -m "feat: add amazing feature"
-```
-
-7. **Push to your fork**
-```bash
-git push origin feature/amazing-feature
-```
-
-8. **Create a Pull Request**
-
-### Code Style Guidelines
-- Use TypeScript for all new code
-- Follow React best practices
-- Use functional components with hooks
-- Implement proper error handling
-- Add appropriate TypeScript types
-- Use consistent naming conventions
-
-## 📋 Roadmap
-
-### Phase 1: Core Features ✅
-- [x] User authentication
-- [x] Profile management
-- [x] Skill management
-- [x] Basic matching
-- [x] Swap requests
-- [x] Feedback system
-
-### Phase 2: Enhanced Features 🚧
-- [ ] Real-time messaging
-- [ ] Video call integration
-- [ ] Advanced search filters
-- [ ] Mobile app (React Native)
-- [ ] Email notifications
-- [ ] Calendar integration
-
-### Phase 3: Advanced Features 🔮
-- [ ] AI-powered recommendations
-- [ ] Skill verification badges
-- [ ] Community groups
-- [ ] Skill marketplace
-- [ ] Analytics dashboard
-- [ ] Multi-language support
-
-## 🐛 Known Issues
-
-1. **OAuth Callback**: Ensure redirect URLs match exactly
-2. **Database Permissions**: RLS policies need proper setup
-3. **CORS**: Configure for production domains
-4. **Rate Limiting**: Not implemented yet
-5. **File Upload**: Avatar uploads need storage setup
-
-## 📝 License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
-## 🆘 Support
-
-### Documentation
-- [Quick Start Guide](./QUICK_START.md)
-- [API Documentation](./AUTH_API_DOCS.md)
-- [Testing Guide](./FEEDBACK_SYSTEM_TESTING_GUIDE.md)
-- [Environment Setup](./frontend/ENVIRONMENT_SETUP.md)
-
-### Getting Help
-- **Issues**: Create a GitHub issue
-- **Discussions**: Use GitHub Discussions
-- **Discord**: Join our community server
-- **Email**: support@skillswap.com
-
-### Common Issues
-- Check the [Quick Start Guide](./QUICK_START.md) for setup issues
-- Verify environment variables are set correctly
-- Ensure database migrations are applied
-- Check Supabase project settings
+### Monitoring & Analytics
+- **Error Tracking**: Comprehensive error monitoring
+- **Performance Metrics**: Real-time performance tracking
+- **User Analytics**: User behavior and engagement tracking
+- **System Health**: Database and server health monitoring
 
 ---
 
-**Happy Skill Swapping! 🎉**
-
-Built with ❤️ by the SkillSwap Team
 
 
 
