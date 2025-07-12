@@ -1,4 +1,4 @@
-import { API_ENDPOINTS } from '../config/config';
+import { config, API_ENDPOINTS } from '../config/config';
 
 // Types for API responses
 export interface AuthResponse {
@@ -138,10 +138,12 @@ class AuthService {
   // 3. Google OAuth Login - Get OAuth URL
   async getGoogleAuthUrl(redirectTo?: string): Promise<GoogleAuthResponse> {
     try {
+      // Make sure redirectTo is set to the correct callback URL
+      const callbackUrl = redirectTo || `${config.FRONTEND_URL}/auth/callback`;
+      console.log('Using callback URL:', callbackUrl);
+      
       const url = new URL(API_ENDPOINTS.AUTH.GOOGLE);
-      if (redirectTo) {
-        url.searchParams.append('redirectTo', redirectTo);
-      }
+      url.searchParams.append('redirectTo', callbackUrl);
 
       console.log('🔍 Auth Service - Making request to:', url.toString());
       console.log('🔍 Auth Service - API_ENDPOINTS.AUTH.GOOGLE:', API_ENDPOINTS.AUTH.GOOGLE);

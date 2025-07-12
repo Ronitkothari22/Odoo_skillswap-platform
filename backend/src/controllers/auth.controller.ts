@@ -151,6 +151,10 @@ export const googleAuth = async (req: Request, res: Response) => {
   try {
     const { redirectTo } = req.query;
     
+    console.log('Google OAuth request received');
+    console.log('Redirect URL:', redirectTo || `${process.env.FRONTEND_URL}/auth/callback`);
+    console.log('FRONTEND_URL from env:', process.env.FRONTEND_URL);
+    
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
@@ -183,18 +187,22 @@ export const googleAuth = async (req: Request, res: Response) => {
 // Handle OAuth Callback (for Google)
 export const handleOAuthCallback = async (req: Request, res: Response) => {
   try {
-    const { code } = req.query;
+    console.log('OAuth callback received:', req.body);
+    const { code } = req.body;
     
     if (!code) {
+      console.error('No code provided in request body');
       return res.status(400).json({ 
         success: false, 
         message: 'Authorization code is required' 
       });
     }
 
+    console.log('Exchanging code for session');
     const { data, error } = await supabase.auth.exchangeCodeForSession(code as string);
     
     if (error) {
+      console.error('Supabase exchange error:', error);
       return res.status(400).json({ 
         success: false, 
         message: error.message 

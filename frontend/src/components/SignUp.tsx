@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Card, CardContent } from '@/components/ui/card';
 import { authService } from '../services/authService';
 
 function SignUp() {
@@ -111,113 +110,104 @@ function SignUp() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8 bg-white p-4 rounded-2xl border-2 border-indigo-200 shadow-sm">
-          <h1 className="text-xl font-bold text-gray-900">Skill Swap Platform</h1>
+        {/* Header with logo */}
+        <div className="flex justify-between items-center bg-white/80 backdrop-blur-sm rounded-xl p-4 mb-6 shadow-sm border border-gray-100">
+          <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+            Skill Swap Platform
+          </h1>
           <Button 
             onClick={handleHome}
-            variant="outline"
-            className="border-2 border-indigo-300 rounded-full px-6 py-2 font-semibold text-sm hover:bg-indigo-50 text-indigo-700"
+            className="bg-white hover:bg-gray-50 text-blue-600 rounded-full px-4 py-1 text-sm font-medium border border-blue-100 shadow-sm transition-all duration-200"
           >
             Home
           </Button>
         </div>
-
-        {/* Sign Up Form */}
-        <Card className="border-2 border-indigo-200 rounded-3xl bg-white shadow-xl">
-          <CardContent className="p-8 space-y-6">
+        
+        {/* Main card */}
+        <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
+          <div className="p-8">
             <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold text-gray-900 mb-2">Join Our Community</h2>
-              <p className="text-gray-600">Create your account and start swapping skills</p>
+              <h2 className="text-2xl font-bold text-gray-800 mb-2">Join Our Community</h2>
+              <p className="text-gray-500">Create your account and start swapping skills</p>
             </div>
-
-            {/* Error Message */}
-            {error && (
-              <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
-                <p className="text-red-600 text-sm">{error}</p>
-              </div>
-            )}
-
-            {/* Success Message */}
-            {success && (
-              <div className="bg-green-50 border border-green-200 rounded-lg p-3 mb-4">
-                <p className="text-green-600 text-sm">{success}</p>
-              </div>
-            )}
-
-            <div>
-              <label className="block text-sm font-semibold text-gray-900 mb-2">Name</label>
+            
+            {/* Name input */}
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">Name</label>
               <Input
                 value={formData.name}
                 onChange={(e) => handleInputChange('name', e.target.value)}
                 placeholder="Enter your full name"
-                className="border-2 border-gray-300 rounded-xl h-12 px-4 py-2 text-base focus:border-indigo-500"
+                className="w-full h-12 px-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-200 focus:border-blue-500 transition-all duration-200"
                 disabled={isLoading}
               />
             </div>
-
-            <div>
-              <label className="block text-sm font-semibold text-gray-900 mb-2">Email</label>
+            
+            {/* Email input */}
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
               <Input
                 type="email"
                 value={formData.email}
                 onChange={(e) => handleInputChange('email', e.target.value)}
                 placeholder="Enter your email"
-                className="border-2 border-gray-300 rounded-xl h-12 px-4 py-2 text-base focus:border-indigo-500"
+                className="w-full h-12 px-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-200 focus:border-blue-500 transition-all duration-200"
                 disabled={isLoading}
               />
             </div>
-
-            <div>
-              <label className="block text-sm font-semibold text-gray-900 mb-2">Password</label>
+            
+            {/* Password input */}
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
               <Input
                 type="password"
                 value={formData.password}
                 onChange={(e) => handleInputChange('password', e.target.value)}
-                placeholder="Create a password (min 6 characters)"
-                className="border-2 border-gray-300 rounded-xl h-12 px-4 py-2 text-base focus:border-indigo-500"
+                placeholder="Create a password (min. 6 characters)"
+                className="w-full h-12 px-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-200 focus:border-blue-500 transition-all duration-200"
                 disabled={isLoading}
               />
             </div>
-
-            <div>
-              <label className="block text-sm font-semibold text-gray-900 mb-2">Confirm Password</label>
+            
+            {/* Confirm Password input */}
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-gray-700 mb-2">Confirm Password</label>
               <Input
                 type="password"
                 value={formData.confirmPassword}
                 onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
                 placeholder="Confirm your password"
-                className="border-2 border-gray-300 rounded-xl h-12 px-4 py-2 text-base focus:border-indigo-500"
+                className="w-full h-12 px-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-200 focus:border-blue-500 transition-all duration-200"
                 disabled={isLoading}
                 onKeyPress={(e) => e.key === 'Enter' && handleSignUp()}
               />
             </div>
-
-            <div className="flex justify-center pt-6">
-              <Button 
-                onClick={handleSignUp}
-                disabled={isLoading}
-                className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700 border-0 rounded-full px-12 py-3 font-semibold text-base shadow-lg transform hover:scale-105 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-              >
-                {isLoading ? 'Creating Account...' : 'Create Account'}
-              </Button>
-            </div>
-
-            <div className="text-center border-t border-gray-200 pt-6">
-              <p className="text-gray-600 text-sm mb-3">Already have an account?</p>
-              <Button 
-                onClick={handleSignIn}
-                variant="outline"
-                disabled={isLoading}
-                className="border-2 border-indigo-300 rounded-xl px-6 py-2 font-semibold text-sm hover:bg-indigo-50 text-indigo-700 disabled:opacity-50"
-              >
-                Sign In
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
+            
+            {/* Create Account button */}
+            <Button 
+              onClick={handleSignUp}
+              disabled={isLoading}
+              className="w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-medium py-3 px-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+            >
+              {isLoading ? 'Creating Account...' : 'Create Account'}
+            </Button>
+          </div>
+          
+          {/* Sign in section */}
+          <div className="bg-gray-50 p-6 border-t border-gray-100 text-center">
+            <p className="text-gray-600 mb-4">Already have an account?</p>
+            <Button 
+              onClick={handleSignIn}
+              variant="outline"
+              disabled={isLoading}
+              className="bg-white hover:bg-gray-50 text-blue-600 font-medium py-2 px-6 rounded-xl border border-blue-200 shadow-sm hover:shadow transition-all duration-200 disabled:opacity-50"
+            >
+              Sign In
+            </Button>
+          </div>
+        </div>
       </div>
     </div>
   );

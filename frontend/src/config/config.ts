@@ -6,9 +6,9 @@ export const config = {
   API_BASE_URL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080',
   
   // Google OAuth Configuration
-  GOOGLE_CLIENT_ID: import.meta.env.VITE_GOOGLE_CLIENT_ID || '454746507967-rn4nqinp2ndfo63m0p3i0sk9i7f4kmsq.apps.googleusercontent.com',
+  GOOGLE_CLIENT_ID: import.meta.env.VITE_GOOGLE_CLIENT_ID || '454746507967-m4nqinp2ndfo63m0p3i0sk9i7f4kmsq.apps.googleusercontent.com',
   
-  // Frontend Configuration
+  // Ensure this matches your authorized JavaScript origin
   FRONTEND_URL: import.meta.env.VITE_FRONTEND_URL || 'http://localhost:3000',
 };
 
